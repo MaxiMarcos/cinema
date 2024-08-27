@@ -1,7 +1,10 @@
 
 package com.maximarcos.cinema.entity;
 
+import com.maximarcos.cinema.enums.Category;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +25,8 @@ public class Movie {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String gender;
     private String language;
     private String subtitle;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 }

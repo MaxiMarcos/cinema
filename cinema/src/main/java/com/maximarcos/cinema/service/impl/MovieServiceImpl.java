@@ -5,6 +5,7 @@
 package com.maximarcos.cinema.service.impl;
 
 import com.maximarcos.cinema.entity.Movie;
+import com.maximarcos.cinema.enums.Category;
 import com.maximarcos.cinema.repository.MovieRepository;
 import com.maximarcos.cinema.service.MovieService;
 import java.util.List;
@@ -24,6 +25,12 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie findMovie(Long id) {
         return movieRepo.findById(id).orElse(null);
+    }
+    
+    @Override
+    public List<Movie> findMoviesByCategory(Category category) {
+        
+        return movieRepo.findMoviesByCategory(category);
     }
 
     @Override

@@ -2,6 +2,7 @@
 package com.maximarcos.cinema.controller;
 
 import com.maximarcos.cinema.entity.Movie;
+import com.maximarcos.cinema.enums.Category;
 import com.maximarcos.cinema.service.impl.MovieServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class MovieController {
     public Movie findMovie(@PathVariable Long id){
         
         return movieServ.findMovie(id);
+    }
+    
+    @GetMapping("/findByCategory/{category}")
+    public List<Movie> findMovie(@PathVariable Category category){
+        
+        return movieServ.findMoviesByCategory(category);
     }
     
     @DeleteMapping("/delete/{id}")
