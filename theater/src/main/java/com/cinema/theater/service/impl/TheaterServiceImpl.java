@@ -5,6 +5,7 @@ import com.cinema.theater.dto.ScheduleDTO;
 import com.cinema.theater.dto.TheaterDTO;
 import com.cinema.theater.service.TheaterService;
 import com.cinema.theater.entity.Theater;
+import com.cinema.theater.repository.ScheduleAPI;
 import com.cinema.theater.repository.TheaterRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class TheaterServiceImpl implements TheaterService {
     TheaterRepository theaterRepo;
     
     @Autowired
-    RestTemplate apiConsumir;
+    private ScheduleAPI scheduleAPI;
     
     @Override
     public List<Theater> getAllTheater(){
@@ -42,7 +43,7 @@ public class TheaterServiceImpl implements TheaterService {
 
         List <LocalDateTime> startTime = new ArrayList<>();
          for (Long scheduleId : scheduleIds) {
-        ScheduleDTO dto = apiConsumir.getForObject("http://localhost:9001/schedule/find/" + scheduleId, ScheduleDTO.class);
+        ScheduleDTO dto = scheduleAPI.getSchedule(scheduleId);
         if (dto != null && dto.getStartTime() != null) {
             startTime.add(dto.getStartTime());
         }

@@ -46,7 +46,6 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void editMovie(Long id, Movie movie) {
         Movie themovie = this.findMovie(id);
-        themovie.setGender(movie.getGender());
         themovie.setLanguage(movie.getLanguage());
         themovie.setName(movie.getName());
         themovie.setSubtitle(movie.getSubtitle());
