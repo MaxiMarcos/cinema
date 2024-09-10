@@ -5,6 +5,7 @@ import com.maximarcos.cinema.entity.Schedule;
 import com.maximarcos.cinema.service.impl.ScheduleServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,10 @@ public class ScheduleController {
     
     @Autowired
     ScheduleServiceImpl scheduleService;
-    
+
+    @Value("${server.port}")
+    private int serverPort;
+
     @GetMapping("/find-all")
     public List<Schedule> findAllSchedule(){
         return scheduleService.getAllSchedule();
@@ -30,6 +34,8 @@ public class ScheduleController {
     
     @GetMapping("/find/{id}")
     public Schedule findSchedule(@PathVariable Long id){
+        System.out.println("----------Estoy en el puerto " + serverPort);
+
         return scheduleService.findSchedule(id);
     }
     
