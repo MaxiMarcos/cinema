@@ -27,6 +27,8 @@ public class Movie {
     private String name;
     private String language;
     private String subtitle;
+    private String description;
+    private String photo;
     @Enumerated(EnumType.STRING)
     private Category category;
 }

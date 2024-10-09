@@ -20,6 +20,9 @@ public class Seat {
     private Long id;
     private int number;
     private String fila;
+    private double price;
     private String status;
-
+    @ManyToOne
+    @JoinColumn(name = "theater_id", nullable = false)
+    private Theater theater;
 }

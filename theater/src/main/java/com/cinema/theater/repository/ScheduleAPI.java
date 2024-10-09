@@ -13,5 +13,5 @@ public interface ScheduleAPI {
     
     @GetMapping("/schedule/find/{scheduleId}")
     public ScheduleDTO getSchedule(@PathVariable("scheduleId")Long scheduleId);
-    
+
 }

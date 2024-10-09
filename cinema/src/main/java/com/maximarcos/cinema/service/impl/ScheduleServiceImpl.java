@@ -1,11 +1,14 @@
 
 package com.maximarcos.cinema.service.impl;
 
+import com.maximarcos.cinema.dto.ScheduleDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.entity.Schedule;
 import com.maximarcos.cinema.repository.ScheduleRepository;
 import com.maximarcos.cinema.service.MovieService;
 import com.maximarcos.cinema.service.ScheduleService;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule findSchedule(Long id) {
         return scheduleRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Schedule> findScheduleByMovie(Long movieId) {
+
+        return scheduleRepo.findSchedulesByMovie(movieId);
     }
 
     @Override

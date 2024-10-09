@@ -11,6 +11,6 @@ public enum Category {
     fancy,
     terror,
     thriller,
-    ScienceFiction,
+    ScienceFiction
     
 }

@@ -8,6 +8,8 @@ import com.cinema.theater.service.TheaterService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +40,17 @@ public class TheaterController {
     }
     
     @PostMapping("/create")
-    public void createTheater(@RequestBody TheaterDTO theaterDTO){
+    public ResponseEntity createTheater(@RequestBody TheaterDTO theaterDTO){
         theaterServ.createTheater(theaterDTO.getName(), theaterDTO.getCapacity(), theaterDTO.getScheduleIds(),
                                    theaterDTO.getScreenType());
+
+        if(theaterDTO != null){
+            return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }
+
     }
     
     @DeleteMapping("/delete/{id}")

@@ -1,8 +1,11 @@
 
 package com.maximarcos.cinema.controller;
 
+import com.maximarcos.cinema.dto.ScheduleDTO;
 import com.maximarcos.cinema.entity.Schedule;
 import com.maximarcos.cinema.service.impl.ScheduleServiceImpl;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +37,15 @@ public class ScheduleController {
     
     @GetMapping("/find/{id}")
     public Schedule findSchedule(@PathVariable Long id){
-        System.out.println("----------Estoy en el puerto " + serverPort);
-
         return scheduleService.findSchedule(id);
+    }
+
+    @GetMapping("/findScheduleByMovie/{movieId}")
+    public List<Schedule> findScheduleByMovie(@PathVariable Long movieId){
+
+
+        return scheduleService.findScheduleByMovie(movieId);
+
     }
     
     @PostMapping("/create")

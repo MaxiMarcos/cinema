@@ -21,9 +21,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Schedule {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id; 
+
+
     private LocalDateTime startTime; 
     
     @ManyToOne

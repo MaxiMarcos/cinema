@@ -28,7 +28,5 @@ public class Theater {
     @ElementCollection
     private List<LocalDateTime> startTime = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "seat_id")
-    private List<Seat> listSeats;
+
 }
