@@ -1,6 +1,5 @@
 package com.cinema.carrito.entity;
 
-import com.cinema.carrito.dto.TicketDTO;
 import com.cinema.carrito.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,13 +12,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Order {
+public class TheOrder {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private TicketDTO ticket; // aca traigo el producto (ticket == seat+movie+schedule)
+   // private TicketDTO ticket; // aca traigo el producto (ticket == seat+movie+schedule)
 
     private BigDecimal priceTotal;
     private int numProducts;

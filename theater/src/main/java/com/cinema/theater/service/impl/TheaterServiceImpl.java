@@ -41,19 +41,23 @@ public class TheaterServiceImpl implements TheaterService {
     @Retry(name="cinema")
     public void createTheater(String name, int capacity, List<Long> scheduleIds,
                               String screenType ){
-        
-        // 1. Buscar schedules
-        // 2. confirmar disponibilidad
 
+        // creamos una lista startTime que servirá para guardar
+        // el startTime del schedule que traigamos con el método "scheduleAPI"
         List <LocalDateTime> startTime = new ArrayList<>();
-        List <String> movies = new ArrayList<>();
+
          for (Long scheduleId : scheduleIds) {
 
+        // buscamos el schedule original por id y guardamos sus valores en un dto de schedule
         ScheduleDTO dto = scheduleAPI.getSchedule(scheduleId);
+
+        // si efectivamente existe y lo trae, agregamos su startTime a la lista "startTime"
         if (dto != null && dto.getStartTime() != null) {
             startTime.add(dto.getStartTime());
         }
     }
+
+         // seteamos el objeto theater con los valores del DTO y de la lista "startTime"
         
         Theater theater = new Theater();
         theater.setName(name);

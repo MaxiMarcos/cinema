@@ -1,16 +1,15 @@
 package com.cinema.carrito.repository;
 
-import com.cinema.carrito.dto.SeatDTO;
+
+import com.cinema.carrito.dto.MovieDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-//@FeignClient(name="theater-service")
-public interface SeatClientAPI {
+@FeignClient(name="cinema")
+public interface MovieClientAPI {
 
-   // @GetMapping("/seat/get/{seatId}")
-    //SeatDTO getSeat(@PathVariable("seatId") Long seatId);
+    @GetMapping("/movie/find/{movieId}")
+    public MovieDTO getMovie(@PathVariable("movieId")Long movieId);
 
 }
-
-

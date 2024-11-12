@@ -1,11 +1,13 @@
 package com.cinema.carrito.entity;
 
+import com.cinema.carrito.dto.MovieDTO;
+import com.cinema.carrito.dto.ScheduleDTO;
 import com.cinema.carrito.dto.SeatDTO;
-import com.cinema.carrito.dto.TicketDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,13 +17,17 @@ import java.math.BigDecimal;
 @Entity
 public class PurchaseItem {
 
+    // Será la compra de un producto. Varios "purchaseItem" pueden integrar una "Order"
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    //private TicketDTO ticket;
-    private SeatDTO seatDTO;
+    @Convert(converter = StringListConverter.class)
+    private List<String> moviee = new ArrayList<>();
 
+    //private SeatDTO seatDTO;
+    //private ScheduleDTO scheduleDTO;
 
     private double totalPrice;
 }

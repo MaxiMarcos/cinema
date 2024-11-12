@@ -22,9 +22,11 @@ import lombok.Setter;
 @Entity
 public class Schedule {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private LocalDateTime startTime;
 
-    private LocalDateTime startTime; 
-    
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
