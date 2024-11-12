@@ -20,6 +20,10 @@ public class TheOrder {
 
    // private TicketDTO ticket; // aca traigo el producto (ticket == seat+movie+schedule)
 
+    @ManyToOne
+    @JoinColumn(name = "purchaseItem_id", nullable = false)
+    private PurchaseItem purchaseItem;
+
     private BigDecimal priceTotal;
     private int numProducts;
 

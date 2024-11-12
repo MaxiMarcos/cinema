@@ -21,7 +21,7 @@ public class PurchaseController {
     @PostMapping("/create")
     public ResponseEntity createPurchase(@RequestBody PurchaseDTO purchaseDTO){
 
-        purchaseService.createPurchase(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds(), purchaseDTO.getTotalPrice());
+        purchaseService.createPurchase(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds());
 
 
         if(purchaseDTO != null){

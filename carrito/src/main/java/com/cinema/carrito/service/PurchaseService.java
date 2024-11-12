@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PurchaseService {
 
-    void createPurchase(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, double totalPrice);
+    void createPurchase(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds);
 }

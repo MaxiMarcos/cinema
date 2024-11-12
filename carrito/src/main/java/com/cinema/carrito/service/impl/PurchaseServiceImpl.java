@@ -24,16 +24,15 @@ public class PurchaseServiceImpl implements PurchaseService {
     //@Autowired
    // ScheduleClientAPI ScheduleAPI;
 
-   // @Autowired
-   // SeatClientAPI SeatAPI;
+    @Autowired
+    SeatClientAPI SeatAPI;
 
-    public void createPurchase(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, double totalPrice){
+    public void createPurchase(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds){
 
         // creo la lista que luego va a recibir las movies
         List <String> movie = new ArrayList<>();
 
-
-        System.out.println("movieIds: " + movieIds);
+        int price = 0;
 
         // busco las movies con movieAPI, las traigo desde el otro microserv y la guardo en un dto
         // desde el dto las envio a la List Movie
@@ -49,9 +48,23 @@ public class PurchaseServiceImpl implements PurchaseService {
                 System.out.println("Error al obtener la película para el id " + movieId + ": " + e.getMessage());
             }
         }
-
-        // Depuración para verificar los valores en 'movie'
+// Depuración para verificar los valores en 'movie'
         System.out.println("Movies to save: " + movie);
+
+
+        for(Long seatId : SeatIds) {
+            try {
+                SeatDTO seatDTO = SeatAPI.getSeat(seatId);
+
+                if(seatDTO != null){
+
+                    price += seatDTO.getPrice();
+                }
+            } catch (Exception e) {
+                System.out.println("Error al obtener la película para el id " + seatId + ": " + e.getMessage());
+            }
+        }
+
 
         // ScheduleDTO scheduleDTO = ScheduleAPI.getSchedule(scheduleId);
         //SeatDTO seatDTO = SeatAPI.getSeat(seatId);
@@ -61,7 +74,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         PurchaseItem purchaseItem = new PurchaseItem();
 
         purchaseItem.setMoviee(movie);
-        purchaseItem.setTotalPrice(totalPrice);
+        purchaseItem.setTotalPrice(price);
 
         purchaseRepo.save(purchaseItem);
     }
