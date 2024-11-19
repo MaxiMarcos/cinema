@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface SeatClientAPI {
 
    @GetMapping("/seat/get/{seatId}")
-    SeatDTO getSeat(@PathVariable("seatId") Long seatId);
+    public SeatDTO getSeat(@PathVariable("seatId") Long seatId);
 
 }
 

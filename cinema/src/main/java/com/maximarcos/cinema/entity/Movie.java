@@ -1,6 +1,7 @@
 
 package com.maximarcos.cinema.entity;
 
+import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,4 +32,7 @@ public class Movie {
     private String photo;
     @Enumerated(EnumType.STRING)
     private Category category;
+    @Enumerated(EnumType.STRING)
+    private Billboard billboard;
+    
 }

@@ -28,5 +28,5 @@ public class TheOrder {
     private int numProducts;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.PENDING;
 }

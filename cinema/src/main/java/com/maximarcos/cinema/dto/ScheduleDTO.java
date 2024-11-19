@@ -1,5 +1,6 @@
 package com.maximarcos.cinema.dto;
 
+import com.maximarcos.cinema.entity.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,5 @@ import java.time.LocalDateTime;
 public class ScheduleDTO {
 
     private LocalDateTime startTime;
+    private Long movie_id;
 }

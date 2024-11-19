@@ -23,8 +23,14 @@ public class PurchaseItem {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringListConverter.class) // recibo un string, probablemente sea mejor
+                                                    // recibir un objeto Movie por relación de entidades
+
     private List<String> moviee = new ArrayList<>();
+
+    @Convert(converter = StringListConverter.class)// recibo un string, probablemente sea mejor
+                                                   // recibir un objeto Movie por relación de entidades
+    private List<String> seat = new ArrayList<>();
 
     //private SeatDTO seatDTO;
     //private ScheduleDTO scheduleDTO;

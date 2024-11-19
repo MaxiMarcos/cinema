@@ -2,6 +2,7 @@
 package com.maximarcos.cinema.repository;
 
 import com.maximarcos.cinema.entity.Movie;
+import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     
     @Query("SELECT m FROM Movie m WHERE m.category = :category")
     List<Movie> findMoviesByCategory(@Param("category") Category category);
-    
+
+    @Query("SELECT m FROM Movie m WHERE m.billboard = :billboard")
+    List<Movie> findMoviesByBillboard(@Param("billboard") Billboard billboard);
 }

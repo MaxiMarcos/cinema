@@ -64,8 +64,14 @@ public class TheaterServiceImpl implements TheaterService {
         theater.setCapacity(capacity);
         theater.setScreenType(screenType);
         theater.setStartTime(startTime);
-        
+
+
         theaterRepo.save(theater);
+
+        Theater savedTheater = theaterRepo.findById(theater.getId()).orElseThrow(
+                () -> new IllegalStateException("Theater no encontrado")
+        );
+        System.out.println("startTime después de recargar: " + savedTheater.getStartTime());
     }
 
     public TheaterDTO fallbackCreateTheaterWithSchedule (Throwable throwable){

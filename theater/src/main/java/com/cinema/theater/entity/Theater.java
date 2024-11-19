@@ -25,8 +25,10 @@ public class Theater {
     private int capacity;
     private String screenType;
     
-    @ElementCollection
+    @ElementCollection // Indica que los elementos de la colección no son entidades por sí mismos,
+    // sino valores que deben almacenarse en una tabla separada/intermedia
     private List<LocalDateTime> startTime = new ArrayList<>();
+    // CAMBIAR ESTO HACIA UNA RELACIÓN DE ENTIDADES PARA QUE STARTIME FORME PARTE DE LA ENTIDAD THEATER
 
 
 }

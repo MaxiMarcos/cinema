@@ -27,7 +27,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Autowired
     SeatClientAPI SeatAPI;
 
-    public void createPurchase(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds){
+    public void addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds){
 
         // creo la lista que luego va a recibir las movies
         List <String> movie = new ArrayList<>();
@@ -52,6 +52,8 @@ public class PurchaseServiceImpl implements PurchaseService {
         System.out.println("Movies to save: " + movie);
 
 
+        List <String> theSeat = new ArrayList<>();
+
         for(Long seatId : SeatIds) {
             try {
                 SeatDTO seatDTO = SeatAPI.getSeat(seatId);
@@ -59,23 +61,39 @@ public class PurchaseServiceImpl implements PurchaseService {
                 if(seatDTO != null){
 
                     price += seatDTO.getPrice();
+                    theSeat.add(seatDTO.getFila() + seatDTO.getNumber());  // FALTA PROBAR
                 }
             } catch (Exception e) {
                 System.out.println("Error al obtener la película para el id " + seatId + ": " + e.getMessage());
             }
         }
 
-
         // ScheduleDTO scheduleDTO = ScheduleAPI.getSchedule(scheduleId);
         //SeatDTO seatDTO = SeatAPI.getSeat(seatId);
-
 
         //creo un PurchaseItem para asignarle los valores que obtuve mediante dtos
         PurchaseItem purchaseItem = new PurchaseItem();
 
         purchaseItem.setMoviee(movie);
         purchaseItem.setTotalPrice(price);
+        purchaseItem.setSeat(theSeat); // FALTA PROBAR
 
         purchaseRepo.save(purchaseItem);
+    }
+
+    @Override
+    public PurchaseItem getPurchase(Long id) {
+        return purchaseRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<PurchaseItem> getAllPurchase() {
+        return purchaseRepo.findAll();
+    }
+
+    @Override
+    public void deletePurchase(Long id) {
+
+        purchaseRepo.deleteById(id);
     }
 }
