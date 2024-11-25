@@ -1,7 +1,10 @@
 package com.cinema.carrito.controller;
 
+import com.cinema.carrito.dto.OrderDTO;
 import com.cinema.carrito.entity.TheOrder;
+import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.service.OrderService;
+import com.cinema.carrito.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +22,15 @@ public class OrderController {
 
     //Se produce la compra de lo que hay en el carrito
     @PostMapping("/create")
-    public ResponseEntity createOrder(@RequestBody TheOrder order){
+    public ResponseEntity createOrder(@RequestBody OrderDTO orderDTO){
 
-        orderService.createOrder(order);
+        try {
+            orderService.createOrder(orderDTO, Status.COMPLETED);
+            return new ResponseEntity<>("The order was created correctly", HttpStatus.CREATED);
 
-        if(order != null){
-            return new ResponseEntity<>(order, HttpStatus.OK);
+        } catch (Exception e) {
 
-        } else {
-            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

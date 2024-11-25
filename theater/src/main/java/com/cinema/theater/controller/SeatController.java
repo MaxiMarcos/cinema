@@ -44,4 +44,12 @@ public class SeatController {
             return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
         }
     }
+
+    // Para editar status
+    @PutMapping("/edit/{id}/status")
+    public ResponseEntity editStatusSeat(@PathVariable Long id, @RequestParam Boolean isAvailable){
+
+        seatService.editStatusSeat(id, isAvailable);
+        return ResponseEntity.ok().build();
+    }
 }

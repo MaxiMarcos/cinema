@@ -16,7 +16,7 @@ public class SeatDTO {
     private int number;
     private String fila;
     private double price;
-    private String status;
+    private Boolean isAvailable;
 
     private Long theater_id;
 }

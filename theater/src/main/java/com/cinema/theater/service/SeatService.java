@@ -13,4 +13,6 @@ public interface SeatService {
     Seat getSeat(Long id);
 
     void editSeat(Long id, Seat seat);
+
+    void editStatusSeat(Long id, boolean isAvailable);
 }

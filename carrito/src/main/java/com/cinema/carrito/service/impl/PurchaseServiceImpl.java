@@ -2,14 +2,16 @@ package com.cinema.carrito.service.impl;
 
 import com.cinema.carrito.dto.*;
 import com.cinema.carrito.entity.PurchaseItem;
+import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.repository.MovieClientAPI;
 import com.cinema.carrito.repository.PurchaseRepository;
-import com.cinema.carrito.repository.ScheduleClientAPI;
 import com.cinema.carrito.repository.SeatClientAPI;
 import com.cinema.carrito.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +22,6 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Autowired
     MovieClientAPI MovieAPI;
-
-    //@Autowired
-   // ScheduleClientAPI ScheduleAPI;
 
     @Autowired
     SeatClientAPI SeatAPI;
@@ -52,34 +51,88 @@ public class PurchaseServiceImpl implements PurchaseService {
         System.out.println("Movies to save: " + movie);
 
 
+
+        List<LocalDateTime> schedules = new ArrayList<>();
+
+        for(Long scheduleId : scheduleIds){
+
+            try {
+                ScheduleDTO scheduleDTO = MovieAPI.getSchedule(scheduleId);
+
+                if(scheduleDTO != null){
+
+                    schedules.add(scheduleDTO.getStartTime());
+                }
+
+            } catch (Exception e){
+
+                System.out.println("Error al obtener un schedule para el id" + scheduleId + ": " + e.getMessage());
+
+            }
+        }
+
+        // Depuración para verificar los valores en 'movie'
+        System.out.println("Movies to save: " + movie);
+
+        // Depuración para verificar los valores en 'movie'
+        System.out.println("Schedules to save: " + schedules);
+
+
         List <String> theSeat = new ArrayList<>();
+
 
         for(Long seatId : SeatIds) {
             try {
                 SeatDTO seatDTO = SeatAPI.getSeat(seatId);
 
-                if(seatDTO != null){
+                if(seatDTO != null && seatDTO.getIsAvailable()){
 
                     price += seatDTO.getPrice();
-                    theSeat.add(seatDTO.getFila() + seatDTO.getNumber());  // FALTA PROBAR
+                    theSeat.add(seatDTO.getFila() + seatDTO.getNumber());
+
+                    SeatAPI.editStatusSeat(seatId, false);
+
+                }else{
+                    System.out.println("el asiento ya está ocupado o no existe");
                 }
             } catch (Exception e) {
-                System.out.println("Error al obtener la película para el id " + seatId + ": " + e.getMessage());
+                System.out.println("Error al obtener el seat para el id " + seatId + ": " + e.getMessage());
             }
         }
 
-        // ScheduleDTO scheduleDTO = ScheduleAPI.getSchedule(scheduleId);
-        //SeatDTO seatDTO = SeatAPI.getSeat(seatId);
+        //creo un PurchaseItem para asignarle los valores que obtuve mediante dtos (siempre y cuando el asiento esté disponible)
 
-        //creo un PurchaseItem para asignarle los valores que obtuve mediante dtos
-        PurchaseItem purchaseItem = new PurchaseItem();
 
-        purchaseItem.setMoviee(movie);
-        purchaseItem.setTotalPrice(price);
-        purchaseItem.setSeat(theSeat); // FALTA PROBAR
+        if(validatePurchaseItem(theSeat, schedules, movie)){
+            PurchaseItem purchaseItem = new PurchaseItem();
 
-        purchaseRepo.save(purchaseItem);
+            purchaseItem.setMoviee(movie);
+            purchaseItem.setTotalPrice(price);
+            purchaseItem.setSeat(theSeat);
+            purchaseItem.setSchedule(schedules);
+
+            purchaseRepo.save(purchaseItem);
+        }else{
+
+            System.out.println("La compra no se puede realizar porque está incompleta");
+            System.out.println("movie: " + movie);
+            System.out.println("theSeat: " + theSeat);
+            System.out.println("schedules: " + schedules);
+        }
+
+
     }
+
+
+    // Las 3 listas deben tener un valor (validador)
+    private boolean validatePurchaseItem(List<String> theSeat, List<LocalDateTime> schedules, List<String> movie) {
+        return theSeat != null && !theSeat.isEmpty() &&
+                schedules != null && !schedules.isEmpty() &&
+                movie != null && !movie.isEmpty();
+    }
+
+
+
 
     @Override
     public PurchaseItem getPurchase(Long id) {
@@ -96,4 +149,17 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         purchaseRepo.deleteById(id);
     }
+
+    @Override
+    public void editStatusPurchase(Long id, Status COMPLETED) {
+
+        PurchaseItem purchaseItem = purchaseRepo.findById(id).orElse(null);
+
+        purchaseItem.setStatus(COMPLETED);
+
+        purchaseRepo.save(purchaseItem);
+
+    }
+
+
 }

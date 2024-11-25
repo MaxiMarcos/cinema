@@ -20,12 +20,14 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public void createSeat(SeatDTO seatDTO){
 
+
+
         Theater theater = theaterService.getTheater(seatDTO.getTheater_id());
         Seat seat = new Seat();
 
+        seat.setIsAvailable(seatDTO.getIsAvailable());
         seat.setTheater(theater);
         seat.setFila(seatDTO.getFila());
-        seat.setStatus(seatDTO.getStatus());
         seat.setNumber(seatDTO.getNumber());
         seat.setPrice(seatDTO.getPrice());
 
@@ -47,15 +49,23 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public void editSeat(Long id, Seat seat){
 
-        Seat newSeat = getSeat(id);
+        Seat newSeat = seatRepo.findById(id).orElse(null);
 
         newSeat.setFila(seat.getFila());
         newSeat.setNumber(seat.getNumber());
-        newSeat.setStatus(seat.getStatus());
+        newSeat.setIsAvailable(seat.getIsAvailable());
         newSeat.setPrice(seat.getPrice());
         newSeat.setTheater(seat.getTheater());
 
         seatRepo.save(newSeat);
+    }
 
+    @Override
+    public void editStatusSeat(Long id, boolean isAvailable) {
+
+        Seat newSeat = seatRepo.findById(id).orElse(null);
+
+        newSeat.setIsAvailable(isAvailable);
+        seatRepo.save(newSeat);
     }
 }

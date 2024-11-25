@@ -1,8 +1,11 @@
 package com.cinema.carrito.dto;
 
+import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +19,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class OrderDTO {
 
-// private TicketDTO ticket; // aca traigo el producto (ticket == seat+movie+schedule)
-
-    private BigDecimal priceTotal;
-    private int numProducts;
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private PurchaseItem purchaseItem;
+    //private BigDecimal priceTotal;
+    //private int numProducts;
 
 }

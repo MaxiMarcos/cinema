@@ -18,15 +18,11 @@ public class TheOrder {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-   // private TicketDTO ticket; // aca traigo el producto (ticket == seat+movie+schedule)
-
     @ManyToOne
     @JoinColumn(name = "purchaseItem_id", nullable = false)
     private PurchaseItem purchaseItem;
 
-    private BigDecimal priceTotal;
-    private int numProducts;
+    //private BigDecimal priceTotal;
+    //private int numProducts;
 
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
 }

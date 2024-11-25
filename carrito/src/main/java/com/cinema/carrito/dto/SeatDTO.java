@@ -16,4 +16,5 @@ public class SeatDTO {
     private int number;
     private String fila;
     private double price;
+    private Boolean isAvailable;
 }

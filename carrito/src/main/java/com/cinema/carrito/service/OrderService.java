@@ -1,13 +1,15 @@
 package com.cinema.carrito.service;
 
+import com.cinema.carrito.dto.OrderDTO;
 import com.cinema.carrito.entity.TheOrder;
+import com.cinema.carrito.enums.Status;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(TheOrder order);
+    void createOrder(OrderDTO orderDTO, Status COMPLETED);
 
     TheOrder getOrder(Long id);
 
