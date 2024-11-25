@@ -4,6 +4,7 @@ package com.maximarcos.cinema.service.impl;
 import com.maximarcos.cinema.dto.ScheduleDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.entity.Schedule;
+import com.maximarcos.cinema.repository.MovieRepository;
 import com.maximarcos.cinema.repository.ScheduleRepository;
 import com.maximarcos.cinema.service.MovieService;
 import com.maximarcos.cinema.service.ScheduleService;
@@ -18,6 +19,9 @@ import org.springframework.web.client.RestTemplate;
 public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     ScheduleRepository scheduleRepo;
+
+    @Autowired
+    MovieService movieService;
     
     @Override
     public List<Schedule> getAllSchedule() {
@@ -41,8 +45,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void createSchedule(Schedule schedule) {
+    public void createSchedule(ScheduleDTO scheduleDTO) {
+
+        Schedule schedule = new Schedule();
+
+        Movie movie = movieService.findMovie(scheduleDTO.getMovie_id());
+
+        schedule.setStartTime(scheduleDTO.getStartTime());
+        schedule.setMovie(movie);
+
         scheduleRepo.save(schedule);
+
     }
 
     @Override

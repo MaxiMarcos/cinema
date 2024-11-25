@@ -49,10 +49,10 @@ public class ScheduleController {
     }
     
     @PostMapping("/create")
-    public ResponseEntity<String> createSchedule(@RequestBody Schedule schedule) {
+    public ResponseEntity<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         
         try {
-            scheduleService.createSchedule(schedule);
+            scheduleService.createSchedule(scheduleDTO);
             return new ResponseEntity<>("The schedule was created correctly", HttpStatus.CREATED);
         
         } catch (Exception e) {
@@ -69,13 +69,17 @@ public class ScheduleController {
     }
     
     @PutMapping("/edit/{id_original}")
-    public Schedule editSchedule(@PathVariable Long id_original,
+    public ResponseEntity editSchedule(@PathVariable Long id_original,
                              @RequestBody Schedule schedule){
-        
-       scheduleService.editSchedule(id_original, schedule);
-       
-       Schedule sch = this.findSchedule(id_original);
-       
-       return sch;
+
+        try {
+            scheduleService.editSchedule(id_original, schedule);
+            return new ResponseEntity<>("The schedule was edited correctly", HttpStatus.CREATED);
+
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

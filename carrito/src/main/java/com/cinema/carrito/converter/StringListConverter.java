@@ -1,4 +1,4 @@
-package com.cinema.carrito.entity;
+package com.cinema.carrito.converter;
 
 
 import jakarta.persistence.AttributeConverter;

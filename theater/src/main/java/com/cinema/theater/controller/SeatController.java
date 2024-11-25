@@ -1,8 +1,11 @@
 package com.cinema.theater.controller;
 
+import com.cinema.theater.dto.SeatDTO;
 import com.cinema.theater.entity.Seat;
 import com.cinema.theater.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,9 +16,9 @@ public class SeatController {
     SeatService seatService;
 
     @PostMapping("/create")
-    public void createSeat(@RequestBody Seat seat){
+    public void createSeat(@RequestBody SeatDTO seatDTO){
 
-        seatService.createSeat(seat);
+        seatService.createSeat(seatDTO);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -25,7 +28,28 @@ public class SeatController {
     }
 
     @GetMapping("/get/{id}")
-    Seat getWSeat(@PathVariable Long id){
+    Seat getSeat(@PathVariable Long id){
         return seatService.getSeat(id);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity editSeat(@PathVariable Long id,
+                            @RequestBody Seat seat){
+
+        if (seat != null) {
+            seatService.editSeat(id, seat);
+            return new ResponseEntity<>(seat, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }
+    }
+
+    // Para editar status
+    @PutMapping("/edit/{id}/status")
+    public ResponseEntity editStatusSeat(@PathVariable Long id, @RequestParam Boolean isAvailable){
+
+        seatService.editStatusSeat(id, isAvailable);
+        return ResponseEntity.ok().build();
     }
 }

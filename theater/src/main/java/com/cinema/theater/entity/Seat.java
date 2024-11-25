@@ -21,7 +21,7 @@ public class Seat {
     private int number;
     private String fila;
     private double price;
-    private String status;
+    private Boolean isAvailable;;
     @ManyToOne
     @JoinColumn(name = "theater_id", nullable = false)
     private Theater theater;

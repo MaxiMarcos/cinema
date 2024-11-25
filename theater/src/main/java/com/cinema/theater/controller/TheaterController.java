@@ -60,13 +60,17 @@ public class TheaterController {
     }
     
     @PutMapping("/edit/{id_original}")
-    public Theater editTheater(@PathVariable Long id_original,
-                            @RequestBody Theater theater){
-        
-        theaterServ.editTheater(id_original, theater);
-        Theater th = this.findTheater(id_original);
-        
-        return th;
+    public ResponseEntity editTheater(@PathVariable Long id_original,
+                            @RequestBody Theater theater) {
+
+        if (theater != null) {
+            theaterServ.editTheater(id_original, theater);
+            return new ResponseEntity<>(theater, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }
+
     }
     
     
