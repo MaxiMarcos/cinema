@@ -34,38 +34,47 @@ public class TheaterController {
 }
     
     @GetMapping("/find/{id}")
-    public Theater findTheater(@PathVariable Long id){
+    public ResponseEntity<?> findTheater(@PathVariable Long id){
         
-        return theaterServ.getTheater(id);
+        try{
+            Theater theater = theaterServ.getTheater(id);
+            return new ResponseEntity<>(theater, HttpStatus.OK);
+        }catch (Exception e){
+
+            return new ResponseEntity<>("Theater was not available", HttpStatus.BAD_REQUEST);
+        }
     }
     
     @PostMapping("/create")
-    public ResponseEntity createTheater(@RequestBody TheaterDTO theaterDTO){
-        theaterServ.createTheater(theaterDTO.getName(), theaterDTO.getCapacity(), theaterDTO.getScheduleIds(),
-                                   theaterDTO.getScreenType());
+    public ResponseEntity<TheaterDTO> createTheater(@RequestBody TheaterDTO theaterDTO){
 
-        if(theaterDTO != null){
+        try{
+            theaterServ.createTheater(theaterDTO);
             return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
     
     @DeleteMapping("/delete/{id}")
-    public void deleteTheater(@PathVariable Long id){
+    public ResponseEntity<?> deleteTheater(@PathVariable Long id){
         
-        theaterServ.deleteTheater(id);
+        try{
+            theaterServ.deleteTheater(id);
+            return new ResponseEntity<>("The theater was deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("The theater was not deleted", HttpStatus.BAD_REQUEST);
+        }
     }
     
     @PutMapping("/edit/{id_original}")
     public ResponseEntity editTheater(@PathVariable Long id_original,
-                            @RequestBody Theater theater) {
+                            @RequestBody TheaterDTO theaterDTO) {
 
-        if (theater != null) {
-            theaterServ.editTheater(id_original, theater);
-            return new ResponseEntity<>(theater, HttpStatus.OK);
+        if (theaterDTO != null) {
+            theaterServ.editTheater(id_original, theaterDTO);
+            return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
 
         } else {
             return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);

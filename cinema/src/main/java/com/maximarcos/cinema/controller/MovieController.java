@@ -1,14 +1,24 @@
 
 package com.maximarcos.cinema.controller;
 
+import com.maximarcos.cinema.dto.MovieDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
 import com.maximarcos.cinema.service.impl.MovieServiceImpl;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import com.maximarcos.cinema.validation.ExistsByName;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,31 +34,48 @@ public class MovieController {
     
     @Autowired
     MovieServiceImpl movieServ;
-    
-    @PostMapping("/create")
-    public ResponseEntity<String> createMovie(@RequestBody Movie movie){
 
+    @PostMapping("/create")
+    public ResponseEntity<Object> createMovie(@Valid @RequestBody Movie movie, BindingResult bindingResult) {
+        // Verificar si hay errores de validación
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        // Lógica del negocio
         try {
             movieServ.createMovie(movie);
-
-            return new ResponseEntity<>("The movie was created correctly, your ID ORDER is:" + movie.getId(), HttpStatus.CREATED);
-        } catch(Exception e){
-            
-            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(
+                    "The movie was created correctly, your ID ORDER is: " + movie.getId(),
+                    HttpStatus.CREATED
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    "There was an error creating the movie: " + e.getMessage(),
+                    HttpStatus.BAD_REQUEST
+            );
         }
-        
     }
     
     @GetMapping("/find-all")
     public List<Movie> findAllMovie(){
-        
+
         return movieServ.getAllMovie();
     }
     
     @GetMapping("/find/{id}")
-    public Movie findMovie(@PathVariable Long id){
-        
-        return movieServ.findMovie(id);
+    public ResponseEntity<?> findMovie(@PathVariable Long id){
+
+        try{
+            MovieDTO movieDTO = movieServ.findMovie(id);
+            return new ResponseEntity<>(movieDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("The movie was not available", HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Buscar películas según categoría
@@ -76,23 +103,26 @@ public class MovieController {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteMovie(@PathVariable Long id){
-        
-        movieServ.deleteMovie(id);
-        return "The movie was deleted correctly";
+    public ResponseEntity<String> deleteMovie(@PathVariable Long id){
+
+        try {
+            movieServ.deleteMovie(id);
+            return new ResponseEntity<>("The movie was deleted correctly", HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("There was an error deleted the movie: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     
     @PutMapping("/edit/{id_original}")
     public ResponseEntity editMovie(@PathVariable Long id_original,
-                           @RequestBody Movie movie){
-
+                                    @Valid @RequestBody Movie movie){
 
         try {
             movieServ.editMovie(id_original, movie);
             return new ResponseEntity<>("The movie was edited correctly", HttpStatus.CREATED);
         } catch(Exception e){
 
-            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("There was an error edited the movie: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

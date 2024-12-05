@@ -4,6 +4,7 @@
  */
 package com.maximarcos.cinema.service.impl;
 
+import com.maximarcos.cinema.dto.MovieDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
@@ -29,14 +30,33 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> getAllMovie() {
+
         return movieRepo.findAll();
     }
 
     @Override
-    public Movie findMovie(Long id) {
+    public MovieDTO findMovie(Long id) {
+
+        Movie movie = movieRepo.findById(id).orElse(null);
+
+        MovieDTO movieDTO = new MovieDTO();
+
+        movieDTO.setBillboard(movie.getBillboard());
+        movieDTO.setName(movie.getName());
+        movieDTO.setPhoto(movie.getPhoto());
+        movieDTO.setLanguage(movie.getLanguage());
+        movieDTO.setCategory(movie.getCategory());
+        movieDTO.setDescription(movie.getDescription());
+        movieDTO.setSubtitle(movie.getSubtitle());
+
+        return movieDTO;
+    }
+
+    @Override
+    public Movie findMovie2(Long id) {
         return movieRepo.findById(id).orElse(null);
     }
-    
+
     @Override
     public List<Movie> findMovieByCategory(String category) {
 
@@ -64,14 +84,21 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void editMovie(Long id, Movie movie) {
-        Movie themovie = this.findMovie(id);
+
+        Movie themovie = this.findMovie2(id);
+
         themovie.setLanguage(movie.getLanguage());
         themovie.setName(movie.getName());
         themovie.setSubtitle(movie.getSubtitle());
         themovie.setCategory(movie.getCategory());
         themovie.setBillboard(movie.getBillboard());
-
+        themovie.setDescription(movie.getDescription());
         movieRepo.save(themovie);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return movieRepo.existsByName(name);
     }
 
 }

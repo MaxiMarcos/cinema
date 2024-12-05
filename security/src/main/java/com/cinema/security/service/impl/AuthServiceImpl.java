@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -27,13 +30,13 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public AuthResponseDTO register(RegisterRequestDTO registerRequestDTO) {
+    public AuthResponseDTO create(RegisterRequestDTO registerRequestDTO, RoleName role){
 
         User user = User.builder()
-                .name(registerRequestDTO.getName())
+                .username(registerRequestDTO.getUsername())
                 .email(registerRequestDTO.getEmail())
                 .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
-                .role(RoleName.CUSTOMER)
+                .role(role)
                 .build();
 
         var savedUser = authRepo.save(user);
@@ -45,11 +48,21 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponseDTO.builder()
                 .jwt(jwtToken)
                 .user(UserResponseDTO.builder()
-                        .name(registerRequestDTO.getName())
+                        .username(registerRequestDTO.getUsername())
                         .email(registerRequestDTO.getEmail())
-                        .role(RoleName.CUSTOMER)
+                        .role(role)
                         .build())
                 .build();
+
+    }
+
+    @Override
+    public List<UserResponseDTO> findAll() {
+         List<User> users = authRepo.findAll();
+
+        return users.stream()
+                .map(user -> new UserResponseDTO(user.getUsername(), user.getEmail(), user.getRole()))
+                .collect(Collectors.toList());
 
     }
 

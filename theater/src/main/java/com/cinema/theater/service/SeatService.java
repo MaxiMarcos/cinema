@@ -4,15 +4,19 @@ import com.cinema.theater.dto.SeatDTO;
 import com.cinema.theater.entity.Seat;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface SeatService {
 
-    void createSeat(SeatDTO seatDTO);
+    SeatDTO createSeat(SeatDTO seatDTO);
 
     void deleteSeat(Long id);
 
-    Seat getSeat(Long id);
+    SeatDTO getSeat(Long id);
 
-    void editSeat(Long id, Seat seat);
+    List<SeatDTO> getAllSeats();
+
+    SeatDTO editSeat(Long id, Seat seat);
 
     void editStatusSeat(Long id, boolean isAvailable);
 }

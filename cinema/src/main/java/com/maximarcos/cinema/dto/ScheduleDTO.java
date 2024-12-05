@@ -1,10 +1,8 @@
 package com.maximarcos.cinema.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.maximarcos.cinema.entity.Movie;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL) // ignora y no retorna los valores null (me sirve para la función findScheduleByMovie)
 public class ScheduleDTO {
 
     private LocalDateTime startTime;

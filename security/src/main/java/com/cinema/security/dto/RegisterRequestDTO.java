@@ -1,5 +1,6 @@
 package com.cinema.security.dto;
 
+import com.cinema.security.entity.RoleName;
 import lombok.*;
 
 @Getter
@@ -9,7 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 public class RegisterRequestDTO {
 
-    String name;
-    String email;
-    String password;
+    private String username;
+    private String email;
+    private String password;
+   // private RoleName role;
+
 }
