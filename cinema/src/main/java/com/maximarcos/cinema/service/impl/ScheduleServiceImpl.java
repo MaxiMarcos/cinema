@@ -9,9 +9,11 @@ import com.maximarcos.cinema.repository.ScheduleRepository;
 import com.maximarcos.cinema.service.MovieService;
 import com.maximarcos.cinema.service.ScheduleService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,9 +36,22 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> findScheduleByMovie(Long movieId) {
+    public List<ScheduleDTO> findScheduleByMovie(Long movieId) {
 
-        return scheduleRepo.findSchedulesByMovie(movieId);
+        List<Schedule> schedules = scheduleRepo.findSchedulesByMovie(movieId);
+        List<ScheduleDTO> scheduleDTOs = new ArrayList<>();
+
+        List<LocalDateTime> aaaa = new ArrayList<>();
+
+        // Convertir cada Schedule en ScheduleDTO
+        for (Schedule schedule : schedules) {
+            ScheduleDTO dto = new ScheduleDTO();
+            dto.setStartTime(schedule.getStartTime()); // Asignar startTime
+            scheduleDTOs.add(dto); // Agregar el DTO a la lista
+        }
+
+        return scheduleDTOs;
+
     }
 
     @Override
@@ -47,9 +62,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void createSchedule(ScheduleDTO scheduleDTO) {
 
+        if (scheduleDTO.getMovie_id() == null) {
+            throw new IllegalArgumentException("Movie ID must not be null");
+        }
+
         Schedule schedule = new Schedule();
 
-        Movie movie = movieService.findMovie(scheduleDTO.getMovie_id());
+        Movie movie = movieService.findMovie2(scheduleDTO.getMovie_id());
+
+        System.out.println("La movie capturada es:" + movie);
 
         schedule.setStartTime(scheduleDTO.getStartTime());
         schedule.setMovie(movie);
@@ -59,11 +80,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void editSchedule(Long id, Schedule schedule) {
-        
-        Schedule sch = this.findSchedule(id);
-        sch.setMovie(schedule.getMovie());
-        sch.setStartTime(schedule.getStartTime());
+    public void editSchedule(Long id, ScheduleDTO scheduleDTO) {
+
+        Schedule sch = scheduleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
+
+        Movie movie = movieService.findMovie2(scheduleDTO.getMovie_id());
+
+        sch.setMovie(movie);
+        sch.setStartTime(scheduleDTO.getStartTime());
         
         scheduleRepo.save(sch);
     }

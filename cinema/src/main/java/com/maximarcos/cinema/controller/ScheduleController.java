@@ -5,6 +5,7 @@ import com.maximarcos.cinema.dto.ScheduleDTO;
 import com.maximarcos.cinema.entity.Schedule;
 import com.maximarcos.cinema.service.impl.ScheduleServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +33,35 @@ public class ScheduleController {
 
     @GetMapping("/find-all")
     public List<Schedule> findAllSchedule(){
+
         return scheduleService.getAllSchedule();
     }
     
     @GetMapping("/find/{id}")
     public Schedule findSchedule(@PathVariable Long id){
+
         return scheduleService.findSchedule(id);
     }
 
-    @GetMapping("/findScheduleByMovie/{movieId}")
-    public List<Schedule> findScheduleByMovie(@PathVariable Long movieId){
+    @GetMapping("/findScheduleByMovie/{movieId}") // modificar a minuscula
+    public ResponseEntity<?> findScheduleByMovie(@PathVariable Long movieId){
+
+        try {
+            List<ScheduleDTO> schedule = scheduleService.findScheduleByMovie(movieId);
+            return ResponseEntity.ok(schedule); // Devuelve el objeto como JSON
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
 
 
-        return scheduleService.findScheduleByMovie(movieId);
+        // modificar que devuelva solo el schedule y no el objeto completo
 
     }
     
     @PostMapping("/create")
     public ResponseEntity<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        
+
+
         try {
             scheduleService.createSchedule(scheduleDTO);
             return new ResponseEntity<>("The schedule was created correctly", HttpStatus.CREATED);
@@ -62,18 +73,25 @@ public class ScheduleController {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteSchedule(@PathVariable Long id){
-        
-        scheduleService.deleteSchedule(id);
-        return "Schedule deleted";
+    public ResponseEntity<String> deleteSchedule(@PathVariable Long id){
+
+        try {
+            scheduleService.deleteSchedule(id);
+            return new ResponseEntity<>("Schedule deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("There was an error deleted the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+
     }
     
     @PutMapping("/edit/{id_original}")
-    public ResponseEntity editSchedule(@PathVariable Long id_original,
-                             @RequestBody Schedule schedule){
+    public ResponseEntity<String> editSchedule(@PathVariable Long id_original,
+                             @RequestBody ScheduleDTO scheduleDTO){
 
         try {
-            scheduleService.editSchedule(id_original, schedule);
+            scheduleService.editSchedule(id_original, scheduleDTO);
             return new ResponseEntity<>("The schedule was edited correctly", HttpStatus.CREATED);
 
         } catch (Exception e) {

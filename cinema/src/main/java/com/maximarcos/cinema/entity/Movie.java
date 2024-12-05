@@ -3,13 +3,14 @@ package com.maximarcos.cinema.entity;
 
 import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
+import com.maximarcos.cinema.validation.ExistsByName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class Movie {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @ExistsByName
+    @NotEmpty
     private String name;
     private String language;
     private String subtitle;

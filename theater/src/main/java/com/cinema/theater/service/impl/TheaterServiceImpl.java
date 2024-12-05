@@ -3,6 +3,9 @@ package com.cinema.theater.service.impl;
 
 import com.cinema.theater.dto.ScheduleDTO;
 import com.cinema.theater.dto.TheaterDTO;
+import com.cinema.theater.entity.Seat;
+import com.cinema.theater.mapper.SeatMapper;
+import com.cinema.theater.mapper.TheaterMapper;
 import com.cinema.theater.service.TheaterService;
 import com.cinema.theater.entity.Theater;
 import com.cinema.theater.repository.ScheduleAPI;
@@ -20,80 +23,93 @@ import org.springframework.stereotype.Service;
 public class TheaterServiceImpl implements TheaterService {
     @Autowired
     TheaterRepository theaterRepo;
-    
+
     @Autowired
     private ScheduleAPI scheduleAPI;
-    
+
+    @Autowired
+    TheaterMapper theaterMapper;
+
+
     @Override
     public List<Theater> getAllTheater(){
-        
+
         return theaterRepo.findAll();
     }
-    
+
     @Override
     public Theater getTheater(Long id){
-        
+
         return theaterRepo.findById(id).orElse(null);
     }
-    
+
     @Override
     @CircuitBreaker(name="cinema", fallbackMethod = "fallbackCreateTheaterWithSchedule" )
     @Retry(name="cinema")
-    public void createTheater(String name, int capacity, List<Long> scheduleIds,
-                              String screenType ){
+    public void createTheater(TheaterDTO theaterDTO){
 
-        // creamos una lista startTime que servirá para guardar
-        // el startTime del schedule que traigamos con el método "scheduleAPI"
         List <LocalDateTime> startTime = new ArrayList<>();
+        List<ScheduleDTO> scheduleDTO = new ArrayList<>();
 
-         for (Long scheduleId : scheduleIds) {
+         for (Long scheduleId : theaterDTO.getScheduleIds()) {
 
-        // buscamos el schedule original por id y guardamos sus valores en un dto de schedule
+        // buscamos con Feign el schedule original y guardamos sus valores en un dto
         ScheduleDTO dto = scheduleAPI.getSchedule(scheduleId);
 
-        // si efectivamente existe y lo trae, agregamos su startTime a la lista "startTime"
+        // si existe y lo trae, agregamos su startTime a la lista "startTime"
+        // y el dto a una lista de DTOs
         if (dto != null && dto.getStartTime() != null) {
             startTime.add(dto.getStartTime());
+            scheduleDTO.add(dto);
         }
     }
 
-         // seteamos el objeto theater con los valores del DTO y de la lista "startTime"
-        
-        Theater theater = new Theater();
-        theater.setName(name);
-        theater.setCapacity(capacity);
-        theater.setScreenType(screenType);
-        theater.setStartTime(startTime);
-
+        Theater theater = theaterMapper.toTheaterSet(theaterDTO, scheduleDTO);
 
         theaterRepo.save(theater);
 
-        Theater savedTheater = theaterRepo.findById(theater.getId()).orElseThrow(
-                () -> new IllegalStateException("Theater no encontrado")
-        );
-        System.out.println("startTime después de recargar: " + savedTheater.getStartTime());
     }
 
     public TheaterDTO fallbackCreateTheaterWithSchedule (Throwable throwable){
 
         return new TheaterDTO("Failed", 0, "Failed", null);
     }
-    
+
     @Override
     public void deleteTheater(Long id){
-        
+
         theaterRepo.deleteById(id);
     }
-    
+
     @Override
-    public void editTheater(Long id, Theater theater){
-        
-        Theater theat = this.getTheater(id);
-        theat.setCapacity(theater.getCapacity());
-        theat.setName(theater.getName());
-        theat.setScreenType(theater.getScreenType());
-        
-        theaterRepo.save(theat);
+    public TheaterDTO editTheater(Long id, TheaterDTO theaterDTO){
+
+        Theater newTheater = theaterRepo.findById(id).orElse(null);
+
+        List <LocalDateTime> startTime = new ArrayList<>();
+        List<ScheduleDTO> scheduleDTO = new ArrayList<>();
+        List<Long> scheduleIds = new ArrayList<>();
+
+        for (Long scheduleId : theaterDTO.getScheduleIds()) {
+
+            ScheduleDTO dto = scheduleAPI.getSchedule(scheduleId);
+
+            if (dto != null && dto.getStartTime() != null) {
+                startTime.add(dto.getStartTime());
+                scheduleDTO.add(dto);
+                scheduleIds.add(dto.getId());
+            }
+        }
+        newTheater.setStartTime(startTime);
+        newTheater.setName(theaterDTO.getName());
+        newTheater.setCapacity(theaterDTO.getCapacity());
+        newTheater.setScreenType(theaterDTO.getScreenType());
+        theaterRepo.save(newTheater);
+
+        TheaterDTO newTheaterDTO = theaterMapper.toTheaterDTO(newTheater, scheduleIds);
+        return newTheaterDTO;
+
+        // EDITAR Y REUTILIZAR CODIGO DEL MÉTODO CREATE
     }
 
 }

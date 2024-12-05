@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/seat")
 public class SeatController {
@@ -16,32 +18,61 @@ public class SeatController {
     SeatService seatService;
 
     @PostMapping("/create")
-    public void createSeat(@RequestBody SeatDTO seatDTO){
+    public ResponseEntity<String> createSeat(@RequestBody SeatDTO seatDTO){
 
-        seatService.createSeat(seatDTO);
+        try {
+            seatService.createSeat(seatDTO);
+            return new ResponseEntity<>("The seat was created", HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>("The seat was not created" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteSeat(@PathVariable Long id){
+    public ResponseEntity<String> deleteSeat(@PathVariable Long id){
 
-        seatService.deleteSeat(id);
+        try {
+            seatService.deleteSeat(id);
+            return new ResponseEntity<>("The seat was deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("The seat was not deleted" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/get/{id}")
-    Seat getSeat(@PathVariable Long id){
-        return seatService.getSeat(id);
+    public ResponseEntity<SeatDTO> getSeat(@PathVariable Long id){
+
+        try{
+            SeatDTO seatDTO = seatService.getSeat(id);
+            return new ResponseEntity<>(seatDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
+    @GetMapping("/get-all")
+    public ResponseEntity<List<SeatDTO>> getAllSeats(){
+
+        try{
+            List<SeatDTO> seatDTO= seatService.getAllSeats();
+            return new ResponseEntity<>(seatDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @PutMapping("/edit/{id}")
-    public ResponseEntity editSeat(@PathVariable Long id,
+    public ResponseEntity<String> editSeat(@PathVariable Long id,
                             @RequestBody Seat seat){
 
-        if (seat != null) {
+        try {
             seatService.editSeat(id, seat);
-            return new ResponseEntity<>(seat, HttpStatus.OK);
+            return new ResponseEntity<>("Seat was edited", HttpStatus.OK);
 
-        } else {
-            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>("Seat was not edited", HttpStatus.BAD_REQUEST);
         }
     }
 

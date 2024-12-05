@@ -18,4 +18,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query("SELECT m FROM Movie m WHERE m.billboard = :billboard")
     List<Movie> findMoviesByBillboard(@Param("billboard") Billboard billboard);
+
+    boolean existsByName(String name);
 }
