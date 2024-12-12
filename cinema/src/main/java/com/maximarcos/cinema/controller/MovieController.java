@@ -62,7 +62,7 @@ public class MovieController {
     }
     
     @GetMapping("/find-all")
-    public List<Movie> findAllMovie(){
+    public List<MovieDTO> findAllMovie(){
 
         return movieServ.getAllMovie();
     }
@@ -114,12 +114,12 @@ public class MovieController {
     }
     
     @PutMapping("/edit/{id_original}")
-    public ResponseEntity editMovie(@PathVariable Long id_original,
+    public ResponseEntity<?> editMovie(@PathVariable Long id_original,
                                     @Valid @RequestBody Movie movie){
 
         try {
-            movieServ.editMovie(id_original, movie);
-            return new ResponseEntity<>("The movie was edited correctly", HttpStatus.CREATED);
+            MovieDTO movieDTO = movieServ.editMovie(id_original, movie);
+            return new ResponseEntity<>("The movie was edited correctly" + movieDTO, HttpStatus.CREATED);
         } catch(Exception e){
 
             return new ResponseEntity<>("There was an error edited the movie: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

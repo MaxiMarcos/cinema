@@ -68,7 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule schedule = new Schedule();
 
-        Movie movie = movieService.findMovie2(scheduleDTO.getMovie_id());
+        Movie movie = movieService.findMovieAlter(scheduleDTO.getMovie_id());
 
         System.out.println("La movie capturada es:" + movie);
 
@@ -85,7 +85,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule sch = scheduleRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
 
-        Movie movie = movieService.findMovie2(scheduleDTO.getMovie_id());
+        Movie movie = movieService.findMovieAlter(scheduleDTO.getMovie_id());
 
         sch.setMovie(movie);
         sch.setStartTime(scheduleDTO.getStartTime());

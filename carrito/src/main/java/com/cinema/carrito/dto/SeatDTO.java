@@ -13,8 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SeatDTO {
 
-    private int number;
-    private String fila;
+    private String number;
     private double price;
     private Boolean isAvailable;
 }

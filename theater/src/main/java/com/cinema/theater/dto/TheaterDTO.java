@@ -1,6 +1,7 @@
 
 package com.cinema.theater.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TheaterDTO {
 
     private String name;

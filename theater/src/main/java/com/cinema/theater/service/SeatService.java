@@ -9,7 +9,7 @@ import java.util.List;
 public interface SeatService {
 
     SeatDTO createSeat(SeatDTO seatDTO);
-
+    void createSeats(SeatDTO seatDTO);
     void deleteSeat(Long id);
 
     SeatDTO getSeat(Long id);

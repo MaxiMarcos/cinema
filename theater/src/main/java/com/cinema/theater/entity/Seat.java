@@ -17,7 +17,6 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int number;
-    private String fila;
     private double price;
     private Boolean isAvailable;;
     @ManyToOne

@@ -23,14 +23,11 @@ public class PurchaseController {
     @PostMapping("/create")
     public ResponseEntity addToCart(@RequestBody PurchaseDTO purchaseDTO){
 
-        purchaseService.addToCart(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds());
-
-
-        if(purchaseDTO != null){
-            return new ResponseEntity<>(purchaseDTO, HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        try{
+            purchaseService.addToCart(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds());
+            return new ResponseEntity<>("Producto cargado al carrito correctamente", HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("ALgo salió mal", HttpStatus.BAD_REQUEST);
         }
 
     }

@@ -13,8 +13,8 @@ public interface TheaterService {
 
     TheaterDTO editTheater(Long id, TheaterDTO theaterDTO);
 
-    List<Theater> getAllTheater();
+    List<TheaterDTO> getAllTheater();
 
-    Theater getTheater(Long id);
+    TheaterDTO getTheater(Long id);
     
 }
