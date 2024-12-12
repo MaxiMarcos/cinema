@@ -10,6 +10,7 @@ import com.cinema.theater.service.TheaterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,6 +31,24 @@ public class SeatServiceImpl implements SeatService {
         seatRepo.save(seat);
 
         return seatMapper.toSeatDTO(seat);
+    }
+
+    public void createSeats(SeatDTO seatDTO){
+
+        boolean asientos[][] = new boolean[10][10];
+        int number = 0;
+
+        for(int f = 0; f < 10; f++){
+            for(int c = 0; c <10; c++){
+                asientos[f][c] = true;
+                number++;
+
+                seatDTO.setNumber(number);
+                seatDTO.setIsAvailable(asientos[f][c]);
+                Seat seat = seatMapper.toSeatSet(seatDTO);
+                seatRepo.save(seat);
+            }
+        }
     }
 
     @Override

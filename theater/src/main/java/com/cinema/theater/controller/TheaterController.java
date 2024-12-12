@@ -27,7 +27,7 @@ public class TheaterController {
     TheaterService theaterServ;
     
     @GetMapping("/find-all")
-    public List<Theater> findAllTheater(){
+    public List<TheaterDTO> findAllTheater(){
     
         return theaterServ.getAllTheater();
     
@@ -37,8 +37,8 @@ public class TheaterController {
     public ResponseEntity<?> findTheater(@PathVariable Long id){
         
         try{
-            Theater theater = theaterServ.getTheater(id);
-            return new ResponseEntity<>(theater, HttpStatus.OK);
+            TheaterDTO theaterDTO = theaterServ.getTheater(id);
+            return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
         }catch (Exception e){
 
             return new ResponseEntity<>("Theater was not available", HttpStatus.BAD_REQUEST);

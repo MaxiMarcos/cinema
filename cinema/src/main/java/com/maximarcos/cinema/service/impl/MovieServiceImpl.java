@@ -8,6 +8,7 @@ import com.maximarcos.cinema.dto.MovieDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
+import com.maximarcos.cinema.mapper.MovieMapper;
 import com.maximarcos.cinema.repository.MovieRepository;
 import com.maximarcos.cinema.service.MovieService;
 
@@ -27,33 +28,28 @@ import org.springframework.stereotype.Service;
 public class MovieServiceImpl implements MovieService {
     @Autowired
     MovieRepository movieRepo;
+    @Autowired
+    MovieMapper movieMapper;
 
     @Override
-    public List<Movie> getAllMovie() {
+    public List<MovieDTO> getAllMovie() {
 
-        return movieRepo.findAll();
+        List<Movie> movies = movieRepo.findAll();
+        List<MovieDTO> moviesDTO = movieMapper.toListMovieDTO(movies);
+        return moviesDTO;
     }
 
     @Override
     public MovieDTO findMovie(Long id) {
 
         Movie movie = movieRepo.findById(id).orElse(null);
-
-        MovieDTO movieDTO = new MovieDTO();
-
-        movieDTO.setBillboard(movie.getBillboard());
-        movieDTO.setName(movie.getName());
-        movieDTO.setPhoto(movie.getPhoto());
-        movieDTO.setLanguage(movie.getLanguage());
-        movieDTO.setCategory(movie.getCategory());
-        movieDTO.setDescription(movie.getDescription());
-        movieDTO.setSubtitle(movie.getSubtitle());
+        MovieDTO movieDTO = movieMapper.toMovieDTO(movie);
 
         return movieDTO;
     }
 
     @Override
-    public Movie findMovie2(Long id) {
+    public Movie findMovieAlter(Long id) {
         return movieRepo.findById(id).orElse(null);
     }
 
@@ -74,27 +70,32 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
+
         movieRepo.deleteById(id);
     }
 
     @Override
     public void createMovie(Movie movie) {
+
         movieRepo.save(movie);
     }
 
     @Override
-    public void editMovie(Long id, Movie movie) {
+    public MovieDTO editMovie(Long id, Movie movie) {
 
-        Movie themovie = this.findMovie2(id);
+            Movie themovie = movieRepo.findById(id).orElse(null);
+            themovie.setLanguage(movie.getLanguage());
+            themovie.setName(movie.getName());
+            themovie.setSubtitle(movie.getSubtitle());
+            themovie.setCategory(movie.getCategory());
+            themovie.setBillboard(movie.getBillboard());
+            themovie.setDescription(movie.getDescription());
+            movieRepo.save(themovie);
 
-        themovie.setLanguage(movie.getLanguage());
-        themovie.setName(movie.getName());
-        themovie.setSubtitle(movie.getSubtitle());
-        themovie.setCategory(movie.getCategory());
-        themovie.setBillboard(movie.getBillboard());
-        themovie.setDescription(movie.getDescription());
-        movieRepo.save(themovie);
+            MovieDTO movieDTO = movieMapper.toMovieDTO(themovie);
+            return movieDTO;
     }
+
 
     @Override
     public boolean existsByName(String name) {

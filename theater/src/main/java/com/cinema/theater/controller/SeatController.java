@@ -29,6 +29,18 @@ public class SeatController {
 
     }
 
+    @PostMapping("/create-all")
+    public ResponseEntity<String> createSeats(@RequestBody SeatDTO seatDTO){
+
+        try {
+            seatService.createSeats(seatDTO);
+            return new ResponseEntity<>("The seats was created", HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>("The seat was not created" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSeat(@PathVariable Long id){
 

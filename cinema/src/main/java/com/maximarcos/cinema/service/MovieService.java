@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 
 public interface MovieService {
     
-    public List<Movie> getAllMovie();   
+    public List<MovieDTO> getAllMovie();
     public MovieDTO findMovie(Long id);
-    public Movie findMovie2(Long id);
+    public Movie findMovieAlter(Long id);
     public List<Movie> findMovieByCategory(String category);
     public List<Movie> findMovieByBillboard(String billboard);
     public void deleteMovie(Long id);
     public void createMovie (Movie movie);
-    public void editMovie(Long id, Movie movie);
+    public MovieDTO editMovie(Long id, Movie movie);
 
     boolean existsByName(String name);
 }

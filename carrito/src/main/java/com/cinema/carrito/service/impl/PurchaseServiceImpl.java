@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
@@ -28,13 +29,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     public void addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds){
 
-        // creo la lista que luego va a recibir las movies
-        List <String> movie = new ArrayList<>();
+        // SOLUCIONAR QUE EL MÉTODO DEJE DE DEVOLVER "OK" SI EN REALIDAD NO SE CONCRETA CORRECTAMENTE
 
+
+        List <String> movie = new ArrayList<>();
         int price = 0;
 
-        // busco las movies con movieAPI, las traigo desde el otro microserv y la guardo en un dto
-        // desde el dto las envio a la List Movie
+
         for(Long movieId : movieIds) {
             try {
                 MovieDTO movieDTO = MovieAPI.getMovie(movieId);
@@ -47,9 +48,8 @@ public class PurchaseServiceImpl implements PurchaseService {
                 System.out.println("Error al obtener la película para el id " + movieId + ": " + e.getMessage());
             }
         }
-// Depuración para verificar los valores en 'movie'
-        System.out.println("Movies to save: " + movie);
 
+        System.out.println("Movies to save: " + movie);
 
 
         List<LocalDateTime> schedules = new ArrayList<>();
@@ -71,10 +71,6 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
         }
 
-        // Depuración para verificar los valores en 'movie'
-        System.out.println("Movies to save: " + movie);
-
-        // Depuración para verificar los valores en 'movie'
         System.out.println("Schedules to save: " + schedules);
 
 
@@ -82,28 +78,25 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
         for(Long seatId : SeatIds) {
+
             try {
                 SeatDTO seatDTO = SeatAPI.getSeat(seatId);
 
                 if(seatDTO != null && seatDTO.getIsAvailable()){
 
                     price += seatDTO.getPrice();
-                    theSeat.add(seatDTO.getFila() + seatDTO.getNumber());
-
+                    theSeat.add(seatDTO.getNumber());
                     SeatAPI.editStatusSeat(seatId, false);
-
-                }else{
-                    System.out.println("el asiento ya está ocupado o no existe");
                 }
+
             } catch (Exception e) {
                 System.out.println("Error al obtener el seat para el id " + seatId + ": " + e.getMessage());
             }
         }
+        System.out.println("Schedules to save: " + schedules);
 
-        //creo un PurchaseItem para asignarle los valores que obtuve mediante dtos (siempre y cuando el asiento esté disponible)
-
-
-        if(validatePurchaseItem(theSeat, schedules, movie)){
+        // Guardamos la compra en la BD siempre y cuando los procesos anteriores hayan salido bien
+        if(validatePurchaseItem(theSeat, schedules, movie)) {
             PurchaseItem purchaseItem = new PurchaseItem();
 
             purchaseItem.setMoviee(movie);
@@ -112,12 +105,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             purchaseItem.setSchedule(schedules);
 
             purchaseRepo.save(purchaseItem);
-        }else{
 
-            System.out.println("La compra no se puede realizar porque está incompleta");
-            System.out.println("movie: " + movie);
-            System.out.println("theSeat: " + theSeat);
-            System.out.println("schedules: " + schedules);
         }
 
 
@@ -126,9 +114,19 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     // Las 3 listas deben tener un valor (validador)
     private boolean validatePurchaseItem(List<String> theSeat, List<LocalDateTime> schedules, List<String> movie) {
-        return theSeat != null && !theSeat.isEmpty() &&
-                schedules != null && !schedules.isEmpty() &&
-                movie != null && !movie.isEmpty();
+        if (theSeat == null || theSeat.isEmpty()) {
+            throw new IllegalArgumentException("Validation failed: The seat list is null or empty.");
+        }
+
+        if (schedules == null || schedules.isEmpty()) {
+            throw new IllegalArgumentException("Validation failed: The schedules list is null or empty.");
+        }
+
+        if (movie == null || movie.isEmpty()) {
+            throw new IllegalArgumentException("Validation failed: The movie list is null or empty.");
+        }
+
+        return true;
     }
 
 

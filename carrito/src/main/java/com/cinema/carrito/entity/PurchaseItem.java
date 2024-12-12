@@ -29,8 +29,7 @@ public class PurchaseItem {
 
     private List<String> moviee = new ArrayList<>();
 
-    @Convert(converter = StringListConverter.class)// recibo un string, quizas sea mejor
-                                                   // recibir un objeto Movie por relación de entidades
+    @Convert(converter = StringListConverter.class)
     private List<String> seat = new ArrayList<>();
 
     @Convert(converter = TimeListConverter.class)
