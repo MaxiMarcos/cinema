@@ -18,10 +18,10 @@ public class JwtServiceImpl implements JwtService {
     @Value("${SECURITY_SECRET}")
     private String secretKey;
 
-    @Value("${api.security.expiration}")
+    @Value("${api.security.jwt.expiration}")
     private long jwtExpiration;
 
-    @Value("${api.security.refresh-token-expiration}")
+    @Value("${api.security.jwt.refresh-token-expiration}")
     private long refreshExpiration;
 
     public String generateToken (User user){
@@ -38,7 +38,7 @@ public class JwtServiceImpl implements JwtService {
 
         return Jwts.builder()
                 .id(user.getId().toString())
-                .claims(Map.of("name", user.getName()))
+                .claims(Map.of("name", user.getUsername()))
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
