@@ -1,6 +1,7 @@
 package com.cinema.security.service.impl;
 
 import com.cinema.security.dto.AuthResponseDTO;
+import com.cinema.security.dto.LoginRequestDTO;
 import com.cinema.security.dto.RegisterRequestDTO;
 import com.cinema.security.dto.UserResponseDTO;
 import com.cinema.security.entity.RoleName;
@@ -11,6 +12,8 @@ import com.cinema.security.repository.TokenRepository;
 import com.cinema.security.service.AuthService;
 import com.cinema.security.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +31,17 @@ public class AuthServiceImpl implements AuthService {
     JwtService jwtService;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Override
-    public AuthResponseDTO create(RegisterRequestDTO registerRequestDTO, RoleName role){
+    public AuthResponseDTO create(RegisterRequestDTO registerRequestDTO, RoleName roleName){
 
         User user = User.builder()
                 .username(registerRequestDTO.getUsername())
                 .email(registerRequestDTO.getEmail())
                 .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
-                .role(role)
+                .role(roleName)
                 .build();
 
         var savedUser = authRepo.save(user);
@@ -47,14 +52,30 @@ public class AuthServiceImpl implements AuthService {
 
         return AuthResponseDTO.builder()
                 .jwt(jwtToken)
-                .user(UserResponseDTO.builder()
-                        .username(registerRequestDTO.getUsername())
-                        .email(registerRequestDTO.getEmail())
-                        .role(role)
-                        .build())
+                .refreshToken(refreshToken)
                 .build();
 
     }
+
+    @Override
+    public AuthResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDTO.getEmail(),
+                        loginRequestDTO.getPassword()
+                )
+        );
+        var user = authRepo.findByEmail(loginRequestDTO.getEmail()).orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(user, jwtToken);
+        return AuthResponseDTO.builder()
+                .jwt(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+
+    }
+
 
     @Override
     public List<UserResponseDTO> findAll() {

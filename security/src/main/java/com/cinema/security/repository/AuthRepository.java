@@ -13,5 +13,5 @@ public interface AuthRepository extends JpaRepository<User, Long> {
 
     List<UserResponseDTO> findAllBy();
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 }

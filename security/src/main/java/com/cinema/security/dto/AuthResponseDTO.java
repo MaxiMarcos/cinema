@@ -9,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class AuthResponseDTO {
     private String jwt;
-    private UserResponseDTO user;
+    private String refreshToken;
+    //private UserResponseDTO user;
 }

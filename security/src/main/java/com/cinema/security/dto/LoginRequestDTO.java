@@ -5,20 +5,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequestDTO {
+public class LoginRequestDTO{
 
-    private String username;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private RoleName role = RoleName.CUSTOMER;
-
 }
+

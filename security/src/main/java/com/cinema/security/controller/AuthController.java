@@ -1,6 +1,7 @@
 package com.cinema.security.controller;
 
 import com.cinema.security.dto.AuthResponseDTO;
+import com.cinema.security.dto.LoginRequestDTO;
 import com.cinema.security.dto.RegisterRequestDTO;
 import com.cinema.security.dto.UserResponseDTO;
 import com.cinema.security.entity.RoleName;
@@ -20,9 +21,11 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/register-customer")
-    public ResponseEntity registerCustomer(@RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity registerCustomer(@RequestBody RegisterRequestDTO registerRequestDTO, RoleName roleName) {
 
-        AuthResponseDTO authResponseDTO = authService.create(registerRequestDTO, RoleName.CUSTOMER);
+        RoleName role = RoleName.CUSTOMER;
+
+        AuthResponseDTO authResponseDTO = authService.create(registerRequestDTO, role);
 
 
         if(authResponseDTO != null){
@@ -34,10 +37,25 @@ public class AuthController {
     }
 
     @PostMapping("/register-admin")
-    public ResponseEntity registerAdmin(@RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity registerAdmin(@RequestBody RegisterRequestDTO registerRequestDTO, RoleName roleName) {
 
-        AuthResponseDTO authResponseDTO = authService.create(registerRequestDTO, RoleName.ADMIN);
+        RoleName role = RoleName.ADMIN;
 
+        AuthResponseDTO authResponseDTO = authService.create(registerRequestDTO, role);
+
+
+        if(authResponseDTO != null){
+            return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity authenticate (@RequestBody LoginRequestDTO loginRequestDTO){
+
+        AuthResponseDTO authResponseDTO = authService.login(loginRequestDTO);
 
         if(authResponseDTO != null){
             return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
