@@ -19,19 +19,6 @@ public class PurchaseController {
     @Autowired
     PurchaseService purchaseService;
 
-    // Cliente agrega producto al carro
-    @PostMapping("/create")
-    public ResponseEntity addToCart(@RequestBody PurchaseDTO purchaseDTO){
-
-        try{
-            purchaseService.addToCart(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds());
-            return new ResponseEntity<>("Producto cargado al carrito correctamente", HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>("ALgo salió mal", HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
     @GetMapping("/get/{id}")
     public ResponseEntity getPurchase(@PathVariable Long id){
 

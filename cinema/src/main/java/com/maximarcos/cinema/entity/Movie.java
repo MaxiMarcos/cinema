@@ -27,8 +27,6 @@ public class Movie {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @ExistsByName
-    @NotEmpty
     private String name;
     private String language;
     private String subtitle;

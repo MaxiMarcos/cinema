@@ -49,21 +49,22 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie findMovieAlter(Long id) {
+    public Movie findMovieNoDTO(Long id) {
+
         return movieRepo.findById(id).orElse(null);
     }
 
     @Override
-    public List<Movie> findMovieByCategory(String category) {
+    public List<MovieDTO> findMovieByCategory(String category) {
 
-        Category cat = Category.valueOf(category.toUpperCase()); // Convierte a mayúsculas para comparación
+        Category cat = Category.valueOf(category.toUpperCase());
         return movieRepo.findMoviesByCategory(cat);
     }
 
     @Override
-    public List<Movie> findMovieByBillboard(String billboard) {
+    public List<MovieDTO> findMovieByBillboard(String billboard) {
 
-        Billboard bil = Billboard.valueOf(billboard.toUpperCase()); // Convierte a mayúsculas para comparación
+        Billboard bil = Billboard.valueOf(billboard.toUpperCase());
 
         return movieRepo.findMoviesByBillboard(bil);
     }
@@ -75,9 +76,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void createMovie(Movie movie) {
+    public MovieDTO createMovie(Movie movie) {
 
         movieRepo.save(movie);
+        MovieDTO movieDTO = movieMapper.toMovieDTO(movie);
+        return movieDTO;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepo;
 
     @Transactional
-    public void createOrder(OrderDTO orderDTO, Status COMPLETED) {
+    public void createOrder(OrderDTO orderDTO) {
         TheOrder theOrder = new TheOrder();
         theOrder.setPurchaseItem(orderDTO.getPurchaseItem());
         orderRepo.save(theOrder);
@@ -40,11 +40,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Verifica el estado inicial
-        System.out.println("Estado inicial: " + purchaseItem.getStatus());
+        System.out.println("Estado inicial del Purchase: " + purchaseItem.getStatus());
 
         // Cambia el estado a COMPLETED
         purchaseItem.setStatus(Status.COMPLETED);
-        System.out.println("Estado modificado: " + purchaseItem.getStatus());
+        System.out.println("Estado modificado del Purchase: " + purchaseItem.getStatus());
 
         // Guarda los cambios
         purchaseRepo.save(purchaseItem);

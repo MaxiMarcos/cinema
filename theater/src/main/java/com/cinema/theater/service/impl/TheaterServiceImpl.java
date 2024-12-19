@@ -52,12 +52,13 @@ public class TheaterServiceImpl implements TheaterService {
     @Override
     @CircuitBreaker(name="cinema", fallbackMethod = "fallbackCreateTheaterWithSchedule" )
     @Retry(name="cinema")
-    public void createTheater(TheaterDTO theaterDTO) {
+    public TheaterDTO createTheater(TheaterDTO theaterDTO) {
         // Procesa los ScheduleDTOs
         List<ScheduleDTO> scheduleDTOList = processScheduleIds(theaterDTO.getScheduleIds());
 
         Theater theater = theaterMapper.toTheaterSet(theaterDTO, scheduleDTOList);
         theaterRepo.save(theater);
+        return theaterDTO;
     }
 
     public TheaterDTO fallbackCreateTheaterWithSchedule (Throwable throwable){
@@ -77,10 +78,7 @@ public class TheaterServiceImpl implements TheaterService {
                 new RuntimeException("Theater not found"));
 
         List<ScheduleDTO> scheduleDTOList = processScheduleIds(theaterDTO.getScheduleIds());
-        List<LocalDateTime> startTimes = extractStartTimes(scheduleDTOList);
-        List<Long> scheduleIds = scheduleDTOList.stream()
-                .map(ScheduleDTO::getId)
-                .collect(Collectors.toList());
+        List<LocalDateTime> startTimes = extractStartTimes(scheduleDTOList);;
 
         theater.setStartTime(startTimes);
         theater.setName(theaterDTO.getName());
@@ -88,7 +86,7 @@ public class TheaterServiceImpl implements TheaterService {
         theater.setScreenType(theaterDTO.getScreenType());
 
         theaterRepo.save(theater);
-        return theaterMapper.toTheaterDTO(theater, scheduleIds);
+        return theaterDTO;
     }
 
 

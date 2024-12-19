@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PurchaseService {
 
-    void addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds);
+    List<Long> addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, PurchaseItem purchaseItem);
 
     PurchaseItem getPurchase(Long id);
     List<PurchaseItem> getAllPurchase();

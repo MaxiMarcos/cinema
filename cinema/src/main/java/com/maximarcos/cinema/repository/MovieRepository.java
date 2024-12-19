@@ -1,6 +1,7 @@
 
 package com.maximarcos.cinema.repository;
 
+import com.maximarcos.cinema.dto.MovieDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.enums.Billboard;
 import com.maximarcos.cinema.enums.Category;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Repository;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     
     @Query("SELECT m FROM Movie m WHERE m.category = :category")
-    List<Movie> findMoviesByCategory(@Param("category") Category category);
+    List<MovieDTO> findMoviesByCategory(@Param("category") Category category);
 
     @Query("SELECT m FROM Movie m WHERE m.billboard = :billboard")
-    List<Movie> findMoviesByBillboard(@Param("billboard") Billboard billboard);
+    List<MovieDTO> findMoviesByBillboard(@Param("billboard") Billboard billboard);
 
     boolean existsByName(String name);
 }

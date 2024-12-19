@@ -30,7 +30,7 @@ public class SeatServiceImpl implements SeatService {
         Seat seat = seatMapper.toSeatSet(seatDTO);
         seatRepo.save(seat);
 
-        return seatMapper.toSeatDTO(seat);
+        return seatDTO;
     }
 
     public void createSeats(SeatDTO seatDTO){
@@ -83,6 +83,7 @@ public class SeatServiceImpl implements SeatService {
         return seatMapper.toSeatDTO(newSeat);
     }
 
+    //Para usar en el microservicio de Purchase y manejar la disponibilidad según se concrete o no la compra
     @Override
     public void editStatusSeat(Long id, boolean isAvailable) {
 

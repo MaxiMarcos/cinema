@@ -2,10 +2,12 @@ package com.cinema.security.service.impl;
 
 import com.cinema.security.entity.User;
 import com.cinema.security.service.JwtService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -23,6 +25,16 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${api.security.jwt.refresh-token-expiration}")
     private long refreshExpiration;
+
+
+    public String extractUsername(String token){
+        Claims jwtToken = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.getSubject();
+    }
 
     public String generateToken (User user){
 
@@ -45,6 +57,24 @@ public class JwtServiceImpl implements JwtService {
                 .signWith(getSignInKey())
                 .compact();
 
+    }
+
+    public boolean isTokenValid (String token, UserDetails userDetails){
+        String username = extractUsername(token);
+        return(username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenExpired (String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token){
+        Claims jwtToken = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.getExpiration();
     }
 
     /**

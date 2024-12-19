@@ -4,6 +4,7 @@ package com.maximarcos.cinema.service.impl;
 import com.maximarcos.cinema.dto.ScheduleDTO;
 import com.maximarcos.cinema.entity.Movie;
 import com.maximarcos.cinema.entity.Schedule;
+import com.maximarcos.cinema.mapper.ScheduleMapper;
 import com.maximarcos.cinema.repository.MovieRepository;
 import com.maximarcos.cinema.repository.ScheduleRepository;
 import com.maximarcos.cinema.service.MovieService;
@@ -24,15 +25,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     MovieService movieService;
+
+    @Autowired
+    ScheduleMapper scheduleMapper;
     
     @Override
-    public List<Schedule> getAllSchedule() {
-        return scheduleRepo.findAll();
+    public List<ScheduleDTO> getAllSchedule() {
+        List<Schedule> schedules = scheduleRepo.findAll();
+
+        return scheduleMapper.toListScheduleDTO(schedules);
     }
 
     @Override
-    public Schedule findSchedule(Long id) {
-        return scheduleRepo.findById(id).orElse(null);
+    public ScheduleDTO findSchedule(Long id) {
+
+        Schedule schedule = scheduleRepo.findById(id).orElse(null);
+        return scheduleMapper.toScheduleDTO(schedule);
     }
 
     @Override
@@ -68,7 +76,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule schedule = new Schedule();
 
-        Movie movie = movieService.findMovieAlter(scheduleDTO.getMovie_id());
+        Movie movie = movieService.findMovieNoDTO(scheduleDTO.getMovie_id());
 
         System.out.println("La movie capturada es:" + movie);
 
@@ -80,16 +88,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void editSchedule(Long id, ScheduleDTO scheduleDTO) {
+    public ScheduleDTO editSchedule(Long id, ScheduleDTO scheduleDTO) {
 
         Schedule sch = scheduleRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
 
-        Movie movie = movieService.findMovieAlter(scheduleDTO.getMovie_id());
+        Movie movie = movieService.findMovieNoDTO(scheduleDTO.getMovie_id());
 
         sch.setMovie(movie);
         sch.setStartTime(scheduleDTO.getStartTime());
         
         scheduleRepo.save(sch);
+
+        return scheduleMapper.toScheduleDTO(sch);
     }
 }

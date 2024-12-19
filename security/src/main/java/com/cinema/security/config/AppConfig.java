@@ -2,6 +2,7 @@ package com.cinema.security.config;
 
 import com.cinema.security.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +16,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@RequiredArgsConstructor
 public class AppConfig {
 
-    private final AuthRepository authRepo;
+    @Autowired
+    AuthRepository authRepo;
 
+    @Bean
+    public JwtAuthenticationFilter authenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,10 +39,12 @@ public class AppConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity.authorizeHttpRequests( (authz) -> authz
-                        .requestMatchers("/auth/register-customer", "/auth/login", "/auth/user/get-all").permitAll()
+                        .requestMatchers("/auth/register-customer", "/auth/login", "/auth/refresh", "/auth/user/get-all").permitAll()
                 .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

@@ -27,12 +27,15 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Autowired
     SeatClientAPI SeatAPI;
 
-    public void addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds){
+    public List<Long> addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, PurchaseItem purchaseItem){
 
         // SOLUCIONAR QUE EL MÉTODO DEJE DE DEVOLVER "OK" SI EN REALIDAD NO SE CONCRETA CORRECTAMENTE
 
 
         List <String> movie = new ArrayList<>();
+        List<LocalDateTime> schedules = new ArrayList<>();
+        List <String> theSeat = new ArrayList<>();
+        List<Long> updatedSeatIds = new ArrayList<>();
         int price = 0;
 
 
@@ -52,8 +55,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         System.out.println("Movies to save: " + movie);
 
 
-        List<LocalDateTime> schedules = new ArrayList<>();
-
         for(Long scheduleId : scheduleIds){
 
             try {
@@ -67,14 +68,12 @@ public class PurchaseServiceImpl implements PurchaseService {
             } catch (Exception e){
 
                 System.out.println("Error al obtener un schedule para el id" + scheduleId + ": " + e.getMessage());
+                e.printStackTrace();
 
             }
         }
 
         System.out.println("Schedules to save: " + schedules);
-
-
-        List <String> theSeat = new ArrayList<>();
 
 
         for(Long seatId : SeatIds) {
@@ -87,18 +86,16 @@ public class PurchaseServiceImpl implements PurchaseService {
                     price += seatDTO.getPrice();
                     theSeat.add(seatDTO.getNumber());
                     SeatAPI.editStatusSeat(seatId, false);
+                    updatedSeatIds.add(seatId);
                 }
 
             } catch (Exception e) {
                 System.out.println("Error al obtener el seat para el id " + seatId + ": " + e.getMessage());
             }
         }
-        System.out.println("Schedules to save: " + schedules);
 
         // Guardamos la compra en la BD siempre y cuando los procesos anteriores hayan salido bien
         if(validatePurchaseItem(theSeat, schedules, movie)) {
-            PurchaseItem purchaseItem = new PurchaseItem();
-
             purchaseItem.setMoviee(movie);
             purchaseItem.setTotalPrice(price);
             purchaseItem.setSeat(theSeat);
@@ -108,28 +105,41 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         }
 
+        return updatedSeatIds;
 
     }
 
 
-    // Las 3 listas deben tener un valor (validador)
+    // Las 3 listas deben tener un valor guardado para que se efectúe la compra (validador)
     private boolean validatePurchaseItem(List<String> theSeat, List<LocalDateTime> schedules, List<String> movie) {
         if (theSeat == null || theSeat.isEmpty()) {
+            statusSeatToTrue(theSeat);
             throw new IllegalArgumentException("Validation failed: The seat list is null or empty.");
         }
 
         if (schedules == null || schedules.isEmpty()) {
+            statusSeatToTrue(theSeat);
             throw new IllegalArgumentException("Validation failed: The schedules list is null or empty.");
+
         }
 
-        if (movie == null || movie.isEmpty()) {
-            throw new IllegalArgumentException("Validation failed: The movie list is null or empty.");
-        }
+            if (movie == null || movie.isEmpty()) {
+                statusSeatToTrue(theSeat);
+                throw new IllegalArgumentException("Validation failed: The movie list is null or empty.");
 
+            }
         return true;
     }
 
-
+    private void statusSeatToTrue(List <String> theSeat){
+        for (String seatId : theSeat) {
+            Long numero = Long.parseLong(seatId);
+            SeatDTO seatDTO = SeatAPI.getSeat(numero);
+            if (seatDTO != null) {
+                SeatAPI.editStatusSeat(numero, true);
+            }
+        }
+    }
 
 
     @Override

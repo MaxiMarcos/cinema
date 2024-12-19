@@ -32,15 +32,23 @@ public class ScheduleController {
     private int serverPort;
 
     @GetMapping("/find-all")
-    public List<Schedule> findAllSchedule(){
+    public ResponseEntity<List<ScheduleDTO>> findAllSchedule(){
 
-        return scheduleService.getAllSchedule();
+        try {
+            return new ResponseEntity<>(scheduleService.getAllSchedule(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
     
     @GetMapping("/find/{id}")
-    public Schedule findSchedule(@PathVariable Long id){
+    public ResponseEntity<ScheduleDTO> findSchedule(@PathVariable Long id){
 
-        return scheduleService.findSchedule(id);
+        try {
+            return new ResponseEntity<>(scheduleService.findSchedule(id), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/findScheduleByMovie/{movieId}") // modificar a minuscula
@@ -48,7 +56,7 @@ public class ScheduleController {
 
         try {
             List<ScheduleDTO> schedule = scheduleService.findScheduleByMovie(movieId);
-            return ResponseEntity.ok(schedule); // Devuelve el objeto como JSON
+            return ResponseEntity.ok(schedule); //
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
@@ -87,16 +95,16 @@ public class ScheduleController {
     }
     
     @PutMapping("/edit/{id_original}")
-    public ResponseEntity<String> editSchedule(@PathVariable Long id_original,
+    public ResponseEntity<ScheduleDTO> editSchedule(@PathVariable Long id_original,
                              @RequestBody ScheduleDTO scheduleDTO){
 
         try {
-            scheduleService.editSchedule(id_original, scheduleDTO);
-            return new ResponseEntity<>("The schedule was edited correctly", HttpStatus.CREATED);
+
+            return new ResponseEntity<>(scheduleService.editSchedule(id_original, scheduleDTO), HttpStatus.CREATED);
 
         } catch (Exception e) {
 
-            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }

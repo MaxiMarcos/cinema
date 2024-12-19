@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(OrderDTO orderDTO, Status COMPLETED);
+    void createOrder(OrderDTO orderDTO);
 
     TheOrder getOrder(Long id);
 
