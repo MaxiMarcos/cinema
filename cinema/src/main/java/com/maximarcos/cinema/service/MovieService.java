@@ -15,11 +15,11 @@ public interface MovieService {
     
     public List<MovieDTO> getAllMovie();
     public MovieDTO findMovie(Long id);
-    public Movie findMovieAlter(Long id);
-    public List<Movie> findMovieByCategory(String category);
-    public List<Movie> findMovieByBillboard(String billboard);
+    public Movie findMovieNoDTO(Long id);
+    public List<MovieDTO> findMovieByCategory(String category);
+    public List<MovieDTO> findMovieByBillboard(String billboard);
     public void deleteMovie(Long id);
-    public void createMovie (Movie movie);
+    public MovieDTO createMovie (Movie movie);
     public MovieDTO editMovie(Long id, Movie movie);
 
     boolean existsByName(String name);

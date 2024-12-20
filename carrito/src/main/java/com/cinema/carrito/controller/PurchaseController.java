@@ -1,6 +1,5 @@
 package com.cinema.carrito.controller;
 
-import com.cinema.carrito.dto.PurchaseDTO;
 import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.service.PurchaseService;
@@ -18,19 +17,6 @@ public class PurchaseController {
 
     @Autowired
     PurchaseService purchaseService;
-
-    // Cliente agrega producto al carro
-    @PostMapping("/create")
-    public ResponseEntity addToCart(@RequestBody PurchaseDTO purchaseDTO){
-
-        try{
-            purchaseService.addToCart(purchaseDTO.getMovieIds(), purchaseDTO.getScheduleIds(), purchaseDTO.getSeatIds());
-            return new ResponseEntity<>("Producto cargado al carrito correctamente", HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>("ALgo salió mal", HttpStatus.BAD_REQUEST);
-        }
-
-    }
 
     @GetMapping("/get/{id}")
     public ResponseEntity getPurchase(@PathVariable Long id){

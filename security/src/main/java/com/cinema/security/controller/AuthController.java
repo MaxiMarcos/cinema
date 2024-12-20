@@ -7,6 +7,7 @@ import com.cinema.security.dto.UserResponseDTO;
 import com.cinema.security.entity.RoleName;
 import com.cinema.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,17 @@ public class AuthController {
         if(authResponseDTO != null){
             return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
 
+        } else {
+            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader){
+
+        AuthResponseDTO authResponseDTO = authService.refreshToken(authHeader);
+        if(authResponseDTO != null){
+            return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
         }

@@ -18,13 +18,13 @@ public class SeatController {
     SeatService seatService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createSeat(@RequestBody SeatDTO seatDTO){
+    public ResponseEntity<SeatDTO> createSeat(@RequestBody SeatDTO seatDTO){
 
         try {
-            seatService.createSeat(seatDTO);
-            return new ResponseEntity<>("The seat was created", HttpStatus.CREATED);
+            SeatDTO dto = seatService.createSeat(seatDTO);
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>("The seat was not created" + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -76,15 +76,15 @@ public class SeatController {
 
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> editSeat(@PathVariable Long id,
+    public ResponseEntity<SeatDTO> editSeat(@PathVariable Long id,
                             @RequestBody Seat seat){
 
         try {
-            seatService.editSeat(id, seat);
-            return new ResponseEntity<>("Seat was edited", HttpStatus.OK);
+            SeatDTO seatDTO = seatService.editSeat(id, seat);
+            return new ResponseEntity<>(seatDTO, HttpStatus.OK);
 
         }catch (Exception e){
-            return new ResponseEntity<>("Seat was not edited", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

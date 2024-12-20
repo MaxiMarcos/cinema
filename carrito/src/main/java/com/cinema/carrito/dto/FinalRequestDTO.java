@@ -1,5 +1,6 @@
 package com.cinema.carrito.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseDTO {
+public class FinalRequestDTO {
 
-
-    private MovieDTO movieDTO;
-    private List<SeatDTO> seatDTO;
-    private List<ScheduleDTO> scheduleDTO;
+    public List<Long> movieIds;
+    public List<Long> scheduleIds;
+    public List<Long> seatIds;
+    public OrderDTO orderDTO;
 
 }

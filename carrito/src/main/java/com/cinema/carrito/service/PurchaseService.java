@@ -1,6 +1,5 @@
 package com.cinema.carrito.service;
 
-import com.cinema.carrito.dto.PurchaseDTO;
 import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.repository.PurchaseRepository;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public interface PurchaseService {
 
-    void addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds);
+    List<Long> addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, PurchaseItem purchaseItem);
 
     PurchaseItem getPurchase(Long id);
     List<PurchaseItem> getAllPurchase();

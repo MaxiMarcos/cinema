@@ -56,7 +56,7 @@ public class MovieMapper {
     public List<MovieDTO> toListMovieDTO(List<Movie> movieList){
 
          if(movieList == null){
-             //ERROR
+             System.out.println("LIST NULL");
          }
 
          List<MovieDTO> newList = new ArrayList<>();

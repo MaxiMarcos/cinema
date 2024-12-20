@@ -27,21 +27,21 @@ public class TheaterController {
     TheaterService theaterServ;
     
     @GetMapping("/find-all")
-    public List<TheaterDTO> findAllTheater(){
+    public List<TheaterDTO> getAllTheater(){
     
         return theaterServ.getAllTheater();
     
 }
     
     @GetMapping("/find/{id}")
-    public ResponseEntity<?> findTheater(@PathVariable Long id){
+    public ResponseEntity<TheaterDTO> getTheater(@PathVariable Long id){
         
         try{
             TheaterDTO theaterDTO = theaterServ.getTheater(id);
             return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
         }catch (Exception e){
 
-            return new ResponseEntity<>("Theater was not available", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -69,7 +69,7 @@ public class TheaterController {
     }
     
     @PutMapping("/edit/{id_original}")
-    public ResponseEntity editTheater(@PathVariable Long id_original,
+    public ResponseEntity<TheaterDTO> editTheater(@PathVariable Long id_original,
                             @RequestBody TheaterDTO theaterDTO) {
 
         if (theaterDTO != null) {
@@ -77,7 +77,7 @@ public class TheaterController {
             return new ResponseEntity<>(theaterDTO, HttpStatus.OK);
 
         } else {
-            return new ResponseEntity<>("Hay un error", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
     }

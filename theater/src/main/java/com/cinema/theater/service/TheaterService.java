@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TheaterService {
 
-    void createTheater(TheaterDTO theaterDTO);
+    TheaterDTO createTheater(TheaterDTO theaterDTO);
 
     void deleteTheater(Long id);
 

@@ -36,35 +36,25 @@ public class MovieController {
     MovieServiceImpl movieServ;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createMovie(@Valid @RequestBody Movie movie, BindingResult bindingResult) {
-        // Verificar si hay errores de validación
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
-            );
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<MovieDTO> createMovie(@RequestBody Movie movie) {
 
-        // Lógica del negocio
         try {
-            movieServ.createMovie(movie);
-            return new ResponseEntity<>(
-                    "The movie was created correctly, your ID ORDER is: " + movie.getId(),
-                    HttpStatus.CREATED
-            );
+            MovieDTO movieDTO = movieServ.createMovie(movie);
+            return new ResponseEntity<>( movieDTO, HttpStatus.CREATED );
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    "There was an error creating the movie: " + e.getMessage(),
-                    HttpStatus.BAD_REQUEST
-            );
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }
     
     @GetMapping("/find-all")
-    public List<MovieDTO> findAllMovie(){
+    public ResponseEntity<List<MovieDTO>> findAllMovie(){
 
-        return movieServ.getAllMovie();
+        try {
+           return new ResponseEntity<>(movieServ.getAllMovie(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
     
     @GetMapping("/find/{id}")
@@ -80,25 +70,25 @@ public class MovieController {
 
     // Buscar películas según categoría
     @GetMapping("/findbycategory/{category}")
-    public ResponseEntity findMovieByCategory(@PathVariable String category){
+    public ResponseEntity<List<MovieDTO>> findMovieByCategory(@PathVariable String category){
 
         try {
-
-            return ResponseEntity.ok(movieServ.findMovieByCategory(category));
+            List<MovieDTO> movieDTOS = movieServ.findMovieByCategory(category);
+            return ResponseEntity.ok(movieDTOS);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + category);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     // Buscar películas según si está en cartelera o próximamente
     @GetMapping("/findbybillboard/{billboard}")
-    public ResponseEntity findMovieByBillboard(@PathVariable String billboard){
+    public ResponseEntity<List<MovieDTO>> findMovieByBillboard(@PathVariable String billboard){
 
         try {
-
-            return ResponseEntity.ok(movieServ.findMovieByBillboard(billboard));
+            List<MovieDTO> movieDTOS = movieServ.findMovieByBillboard(billboard);
+            return ResponseEntity.ok(movieDTOS);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + billboard);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     

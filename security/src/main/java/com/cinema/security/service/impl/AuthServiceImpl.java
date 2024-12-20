@@ -14,6 +14,7 @@ import com.cinema.security.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +74,32 @@ public class AuthServiceImpl implements AuthService {
                 .jwt(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+
+    }
+
+    public AuthResponseDTO refreshToken (String authHeader){
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+
+            throw new IllegalArgumentException("Invalid Bearer token");
+        }
+
+        String refreshToken = authHeader.substring(7);
+        String userEmail = jwtService.extractUsername(refreshToken);
+
+        if(userEmail == null){
+            throw  new IllegalArgumentException("Invalid refresh token");
+        }
+
+        User user = authRepo.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException(userEmail));
+
+        if(!jwtService.isTokenValid(refreshToken, user)){
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        String accessToken = jwtService.generateToken(user);
+        saveUserToken(user, accessToken);
+        return new AuthResponseDTO(accessToken, refreshToken);
 
     }
 

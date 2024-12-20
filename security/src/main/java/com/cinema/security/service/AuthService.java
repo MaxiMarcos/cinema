@@ -13,5 +13,7 @@ public interface AuthService {
 
     AuthResponseDTO create(RegisterRequestDTO registerRequestDTO, RoleName roleName);
     AuthResponseDTO login (LoginRequestDTO loginRequestDTO);
+    public AuthResponseDTO refreshToken (String authHeader);
+
     List<UserResponseDTO> findAll();
 }

@@ -25,7 +25,7 @@ public class OrderController {
     public ResponseEntity createOrder(@RequestBody OrderDTO orderDTO){
 
         try {
-            orderService.createOrder(orderDTO, Status.COMPLETED);
+            orderService.createOrder(orderDTO);
             return new ResponseEntity<>("The order was created correctly", HttpStatus.CREATED);
 
         } catch (Exception e) {
