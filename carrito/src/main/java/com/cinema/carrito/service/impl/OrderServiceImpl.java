@@ -28,7 +28,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepo;
 
-    @Transactional
+    @Override
     public void createOrder(OrderDTO orderDTO) {
         TheOrder theOrder = new TheOrder();
         theOrder.setPurchaseItem(orderDTO.getPurchaseItem());

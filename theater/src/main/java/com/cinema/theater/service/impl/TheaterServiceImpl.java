@@ -94,7 +94,12 @@ public class TheaterServiceImpl implements TheaterService {
         List<ScheduleDTO> scheduleDTOList = new ArrayList<>();
         for (Long scheduleId : scheduleIds) {
             ScheduleDTO dto = scheduleAPI.getSchedule(scheduleId);
-            if (dto != null && dto.getStartTime() != null) {
+            if (dto == null) {
+                System.out.println("Error: Schedule con ID " + scheduleId + " no fue encontrado.");
+            } else if (dto.getStartTime() == null) {
+                System.out.println("Error: Schedule con ID " + scheduleId + " tiene un startTime nulo.");
+            } else {
+                System.out.println("Schedule válido: " + dto);
                 scheduleDTOList.add(dto);
             }
         }

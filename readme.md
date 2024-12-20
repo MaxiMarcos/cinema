@@ -29,3 +29,9 @@
 - MySQL
 - Spring Cloud
 - Spring Security
+
+## Documentación 📜
+Una vez descargado el proyecto, puedes leer documentación de la API aquí: http://localhost:[puerto del servicio]/swagger-ui/index.html
+
+
+** El proyecto está avanzado pero aún tiene algunos aspectos a desarrollar, como la integración de seguridad al microservicio con Spring Security.

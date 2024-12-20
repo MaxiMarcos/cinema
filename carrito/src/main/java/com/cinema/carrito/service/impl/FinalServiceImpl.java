@@ -1,8 +1,9 @@
 package com.cinema.carrito.service.impl;
 
-import com.cinema.carrito.dto.OrderDTO;
+import com.cinema.carrito.dto.*;
 import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
+import com.cinema.carrito.repository.MovieClientAPI;
 import com.cinema.carrito.repository.PurchaseRepository;
 import com.cinema.carrito.repository.SeatClientAPI;
 import com.cinema.carrito.service.FinalService;
@@ -30,11 +31,15 @@ public class FinalServiceImpl implements FinalService {
     @Autowired
     SeatClientAPI SeatAPI;
 
+    @Autowired
+    MovieClientAPI MovieAPI;
+
     @Override
-    public void createOrderWithCart(List<Long> movieIds, List<Long> scheduleIds, List<Long> seatIds, OrderDTO orderDTO) {
+    @Transactional
+    public PurchaseDTO createOrderWithCart(List<Long> movieIds, List<Long> scheduleIds, List<Long> seatIds, OrderDTO orderDTO) {
+
 
         PurchaseItem purchaseItem = new PurchaseItem();
-
         List<Long> updatedSeatIds = new ArrayList<>();
 
         try {
@@ -58,5 +63,28 @@ public class FinalServiceImpl implements FinalService {
             }
             throw new RuntimeException("Error durante la transacción: " + e.getMessage(), e);
         }
+
+
+
+        PurchaseDTO purchaseDTO = new PurchaseDTO();
+        MovieDTO movieDTO = new MovieDTO();
+        List<ScheduleDTO> scheduleDTO = new ArrayList<>();
+        List<SeatDTO> seatDTO = new ArrayList<>();
+
+        for(Long movieId : movieIds){
+            movieDTO = MovieAPI.getMovie(movieId);
+        }
+        for(Long scheduleId : scheduleIds){
+            scheduleDTO.add(MovieAPI.getSchedule(scheduleId));
+        }
+        for(Long seatId : seatIds){
+            seatDTO.add(SeatAPI.getSeat(seatId));
+        }
+
+        purchaseDTO.setMovieDTO(movieDTO);
+        purchaseDTO.setScheduleDTO(scheduleDTO);
+        purchaseDTO.setSeatDTO(seatDTO);
+
+        return purchaseDTO;
     }
 }

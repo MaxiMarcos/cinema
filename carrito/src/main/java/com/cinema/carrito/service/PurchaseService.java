@@ -1,6 +1,5 @@
 package com.cinema.carrito.service;
 
-import com.cinema.carrito.dto.PurchaseDTO;
 import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.repository.PurchaseRepository;
