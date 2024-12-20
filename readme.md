@@ -11,7 +11,7 @@
 
 ## ✨ Características ✨
 - Gestión de películas, horarios y salas.
-- Filtros de búsqueda de películas (género, disponibilidad)
+- Filtros de búsqueda (género, disponibilidad)
 - Carro de compras
 - Arquitectura basada en microservicios.
 - Autenticación y autorización mediante JWT.
@@ -29,6 +29,7 @@
 - MySQL
 - Spring Cloud
 - Spring Security
+
 
 ## Documentación 📜
 Una vez descargado el proyecto, puedes leer documentación de la API aquí: http://localhost:[puerto del servicio]/swagger-ui/index.html
