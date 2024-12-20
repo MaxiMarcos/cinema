@@ -11,7 +11,7 @@
 
 ## ✨ Características ✨
 - Gestión de películas, horarios y salas.
-- Filtros de búsqueda de películas (género, disponibilidad)
+- Filtros de búsqueda (género, disponibilidad)
 - Carro de compras
 - Arquitectura basada en microservicios.
 - Autenticación y autorización mediante JWT.
@@ -29,3 +29,6 @@
 - MySQL
 - Spring Cloud
 - Spring Security
+
+
+** El proyecto está avanzado pero aún tiene algunos aspectos a desarrollar, como la integración de seguridad al microservicio con Spring Security.
