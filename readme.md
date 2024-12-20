@@ -34,7 +34,7 @@
 ## Documentación 📜
 
 Una vez descargado el proyecto, puedes acceder a la documentación de la API a través de Swagger:
-- URL de la documentación: http://localhost:[puerto del servicio]/swagger-ui/index.html
+- URL de la documentación: localhost:[puerto del servicio]/swagger-ui/index.html
 
 Nota: Asegúrate de reemplazar [puerto del servicio] por el puerto correspondiente al servicio en tu entorno local.
 
