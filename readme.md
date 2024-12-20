@@ -31,4 +31,6 @@
 - Spring Security
 
 
+
+
 ** El proyecto está avanzado pero aún tiene algunos aspectos a desarrollar, como la integración de seguridad al microservicio con Spring Security.
