@@ -32,6 +32,8 @@
 
 
 ## Documentación 📜
+Ejemplo: ![image](https://github.com/user-attachments/assets/bcfd1feb-e14e-4c8f-95bf-c7fa4ef28581)
+
 
 Una vez descargado el proyecto, puedes acceder a la documentación de la API a través de Swagger:
 - URL de la documentación: localhost:[puerto del servicio]/swagger-ui/index.html
