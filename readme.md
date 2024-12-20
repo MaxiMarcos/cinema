@@ -32,9 +32,11 @@
 
 
 ## Documentación 📜
+Ejemplo: (Importante dejar orderDTO vacío ya que se construye a partir de los valores anteriores) ![image](https://github.com/user-attachments/assets/bcfd1feb-e14e-4c8f-95bf-c7fa4ef28581)
+
 
 Una vez descargado el proyecto, puedes acceder a la documentación de la API a través de Swagger:
-- URL de la documentación: http://localhost:[puerto del servicio]/swagger-ui/index.html
+- URL de la documentación: localhost:[puerto del servicio]/swagger-ui/index.html
 
 Nota: Asegúrate de reemplazar [puerto del servicio] por el puerto correspondiente al servicio en tu entorno local.
 
