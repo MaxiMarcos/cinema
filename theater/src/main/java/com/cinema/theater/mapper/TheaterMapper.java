@@ -19,6 +19,7 @@ public class TheaterMapper {
 
     public TheaterDTO toTheaterDTO(Theater theater, List<Long> scheduleIds) {
         return TheaterDTO.builder()
+                .id(theater.getId())
                 .name(theater.getName())
                 .capacity(theater.getCapacity())
                 .screenType(theater.getScreenType())
@@ -28,6 +29,7 @@ public class TheaterMapper {
 
     // Sobrecarga para cuando no hay scheduleIds
     public TheaterDTO toTheaterDTOSinSchedule(Theater theater) {
+
         return toTheaterDTO(theater, null);
     }
 

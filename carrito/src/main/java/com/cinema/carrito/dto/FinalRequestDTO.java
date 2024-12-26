@@ -15,6 +15,7 @@ import java.util.List;
 public class FinalRequestDTO {
 
     public List<Long> movieIds;
+    //public List<Long> theaterIds;
     public List<Long> scheduleIds;
     public List<Long> seatIds;
     public OrderDTO orderDTO;

@@ -1,16 +1,17 @@
 package com.cinema.carrito.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieDTO {
+public class TheaterDTO {
     private Long id;
     private String name;
-    private String language;
-    private String subtitle;
+    private int capacity;
+    private String screenType;
 }

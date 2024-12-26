@@ -1,17 +1,15 @@
 package com.cinema.carrito.dto;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ScheduleDTO {
+public class SimpleScheduleDTO {
 
     private LocalDateTime startTime;
-    private Long movie_id;
 }

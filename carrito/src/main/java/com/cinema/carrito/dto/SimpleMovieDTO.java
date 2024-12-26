@@ -1,6 +1,5 @@
 package com.cinema.carrito.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -8,8 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieDTO {
-    private Long id;
+public class SimpleMovieDTO {
     private String name;
     private String language;
     private String subtitle;

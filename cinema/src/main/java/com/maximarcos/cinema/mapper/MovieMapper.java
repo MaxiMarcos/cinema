@@ -13,6 +13,7 @@ public class MovieMapper {
     public MovieDTO toMovieDTO(Movie movie){
 
         return MovieDTO.builder()
+                .id(movie.getId())
                 .name(movie.getName())
                 .category(movie.getCategory())
                 .photo(movie.getPhoto())
