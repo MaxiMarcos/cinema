@@ -32,7 +32,8 @@
 
 
 ## Documentación 📜
-Ejemplo: (Importante dejar orderDTO vacío ya que se construye a partir de los valores anteriores) ![image](https://github.com/user-attachments/assets/bcfd1feb-e14e-4c8f-95bf-c7fa4ef28581)
+Ejemplo: (Importante dejar orderDTO vacío ya que se construye a partir de los valores anteriores) ![imageApii](https://github.com/user-attachments/assets/4c4ea215-f4bb-414c-a68b-b36f9aa38c0d)
+)
 
 
 Una vez descargado el proyecto, puedes acceder a la documentación de la API a través de Swagger:
