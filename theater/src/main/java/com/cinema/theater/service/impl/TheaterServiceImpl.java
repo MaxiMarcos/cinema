@@ -61,11 +61,6 @@ public class TheaterServiceImpl implements TheaterService {
         return theaterDTO;
     }
 
-    public TheaterDTO fallbackCreateTheaterWithSchedule (Throwable throwable){
-
-        return new TheaterDTO("Failed", 0, "Failed", null);
-    }
-
     @Override
     public void deleteTheater(Long id){
 

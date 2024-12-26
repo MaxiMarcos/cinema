@@ -19,7 +19,7 @@ public class ScheduleMapper {
 
     public ScheduleDTO toScheduleDTO(Schedule schedule){
 
-        Movie movie = movieService.findMovieNoDTO(schedule.getId());
+        Movie movie = schedule.getMovie();
 
         return ScheduleDTO.builder()
                 .startTime(schedule.getStartTime())

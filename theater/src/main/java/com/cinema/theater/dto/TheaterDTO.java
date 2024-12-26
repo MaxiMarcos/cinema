@@ -1,6 +1,7 @@
 
 package com.cinema.theater.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TheaterDTO {
 
+    private Long id;
     private String name;
     private int capacity;
     private String screenType;

@@ -1,21 +1,25 @@
 package com.cinema.carrito.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PurchaseDTO {
 
 
-    private MovieDTO movieDTO;
-    private List<SeatDTO> seatDTO;
-    private List<ScheduleDTO> scheduleDTO;
+    private List<SimpleMovieDTO> movieDTO = new ArrayList<>();;
+   // private List<TheaterDTO> theaterDTO = new ArrayList<>();;
+    private List<SimpleSeatDTO> seatDTO = new ArrayList<>();;
+    private List<SimpleScheduleDTO> scheduleDTO = new ArrayList<>();;
+    private double priceTotal;
 
+    @JsonIgnore
+    private List<Long> updatedSeatIds = new ArrayList<>();
 }

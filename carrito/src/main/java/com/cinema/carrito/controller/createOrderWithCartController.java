@@ -4,6 +4,7 @@ import com.cinema.carrito.dto.FinalRequestDTO;
 import com.cinema.carrito.dto.OrderDTO;
 import com.cinema.carrito.dto.PurchaseDTO;
 import com.cinema.carrito.service.FinalService;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,15 @@ public class createOrderWithCartController {
     FinalService finalService;
 
     @PostMapping("/createOrderCart")
-    public ResponseEntity<PurchaseDTO> createOrderWithCart (@RequestBody FinalRequestDTO finalRequestDTO){
+    public ResponseEntity<?> createOrderWithCart (@RequestBody FinalRequestDTO finalRequestDTO){
 
         try{
-            PurchaseDTO purchaseDTO = finalService.createOrderWithCart(finalRequestDTO.movieIds, finalRequestDTO.scheduleIds, finalRequestDTO.seatIds,finalRequestDTO.orderDTO);
+            PurchaseDTO purchaseDTO = finalService.createOrderWithCart(finalRequestDTO.movieIds, finalRequestDTO.scheduleIds, finalRequestDTO.seatIds, finalRequestDTO.orderDTO);
             return new ResponseEntity<>(purchaseDTO, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -39,14 +40,8 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("PurchaseItem not found");
         }
 
-        // Verifica el estado inicial
-        System.out.println("Estado inicial del Purchase: " + purchaseItem.getStatus());
-
-        // Cambia el estado a COMPLETED
         purchaseItem.setStatus(Status.COMPLETED);
-        System.out.println("Estado modificado del Purchase: " + purchaseItem.getStatus());
 
-        // Guarda los cambios
         purchaseRepo.save(purchaseItem);
     }
 

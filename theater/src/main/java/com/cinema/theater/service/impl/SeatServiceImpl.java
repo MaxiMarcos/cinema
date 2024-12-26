@@ -91,5 +91,7 @@ public class SeatServiceImpl implements SeatService {
 
         newSeat.setIsAvailable(isAvailable);
         seatRepo.save(newSeat);
+
+        System.out.println("llamando al método del service theater:" + newSeat.getIsAvailable());
     }
 }
