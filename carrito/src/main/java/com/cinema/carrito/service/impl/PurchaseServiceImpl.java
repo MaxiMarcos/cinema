@@ -26,60 +26,41 @@ import java.util.stream.Collectors;
 public class PurchaseServiceImpl implements PurchaseService {
     @Autowired
     PurchaseRepository purchaseRepo;
-
     @Autowired
     MovieClientAPI MovieAPI;
-
     @Autowired
     SeatClientAPI SeatAPI;
-
     @Autowired
     mapperDTOs mapperDTOs;
 
     @Transactional
-    public PurchaseDTO addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, PurchaseItem purchaseItem) throws SystemException {
+    public PurchaseDTO addToCart(List<Long>scheduleIds, List<Long>seatIds) throws SystemException {
 
         List<SeatDTO> seats = new ArrayList<>();
         List<ScheduleDTO> schedules = new ArrayList<>();
         List<MovieDTO> movies = new ArrayList<>();
         List<TheaterDTO> theaters = new ArrayList<>();
+        PurchaseItem purchaseItem = new PurchaseItem();
 
         List<Long> updatedSeatIds = new ArrayList<>();
         int price = 0;
 
         try {
-
-            for (Long movieId : movieIds) {
-                try {
-                    MovieDTO movieDTO = MovieAPI.getMovie(movieId);
-
-                    if (movieDTO != null) {
-
-                        movies.add(movieDTO);
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error al obtener la película para el id " + movieId + ": " + e.getMessage());
-                }
-            }
-
             for (Long scheduleId : scheduleIds) {
-
                 try {
                     ScheduleDTO scheduleDTO = MovieAPI.getSchedule(scheduleId);
 
                     if (scheduleDTO != null) {
-
                         schedules.add(scheduleDTO);
+                        movies.add(scheduleDTO.getMovie());
                     }
 
                 } catch (Exception e) {
 
                     System.out.println("Error al obtener un schedule para el id" + scheduleId + ": " + e.getMessage());
-
                 }
             }
-
-            for (Long seatId : SeatIds) {
+            for (Long seatId : seatIds) {
 
                 try {
                     SeatDTO seatDTO = SeatAPI.getSeat(seatId);
@@ -114,10 +95,10 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
             PurchaseDTO purchaseDTO = new PurchaseDTO();
-            purchaseDTO.setSeatDTO(mapperDTOs.toListSeatDTO(seats));
-            purchaseDTO.setScheduleDTO(mapperDTOs.toListScheduleDTO(schedules));
+            purchaseDTO.setSeatDTO(seats);
+            purchaseDTO.setScheduleDTO(schedules);
             purchaseDTO.setPriceTotal(price);
-            purchaseDTO.setMovieDTO(mapperDTOs.toListMovieDTO(movies));
+            purchaseDTO.setMovieDTO(movies);
             purchaseDTO.setUpdatedSeatIds(updatedSeatIds);
 
             return purchaseDTO;
@@ -144,8 +125,6 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
         }
     }
-
-
     private boolean validatePurchaseItem(
             List<SeatDTO> seats,
             List<ScheduleDTO> schedules,
@@ -184,7 +163,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             boolean isScheduleValid = false;
 
             for (MovieDTO movie : movies) {
-                if (schedule.getMovie_id().equals(movie.getId())) {
+                if (schedule.getMovie().equals(movie)) {
                     isScheduleValid = true;
                     break;
                 }

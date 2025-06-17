@@ -24,7 +24,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleRepository scheduleRepo;
 
     @Autowired
-    MovieService movieService;
+    MovieRepository movieRepo;
 
     @Autowired
     ScheduleMapper scheduleMapper;
@@ -49,17 +49,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Schedule> schedules = scheduleRepo.findSchedulesByMovie(movieId);
         List<ScheduleDTO> scheduleDTOs = new ArrayList<>();
 
-        List<LocalDateTime> aaaa = new ArrayList<>();
-
-        // Convertir cada Schedule en ScheduleDTO
+        // Convertir cada Schedule en ScheduleDTO para retornarlos
         for (Schedule schedule : schedules) {
             ScheduleDTO dto = new ScheduleDTO();
-            dto.setStartTime(schedule.getStartTime()); // Asignar startTime
-            scheduleDTOs.add(dto); // Agregar el DTO a la lista
+            dto.setStartTime(schedule.getStartTime());
+            scheduleDTOs.add(dto);
         }
 
         return scheduleDTOs;
-
     }
 
     @Override
@@ -76,15 +73,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule schedule = new Schedule();
 
-        Movie movie = movieService.findMovieNoDTO(scheduleDTO.getMovie_id());
-
-        System.out.println("La movie capturada es:" + movie);
+        Movie movie = movieRepo.findById(scheduleDTO.getMovie_id()).orElse(null);
 
         schedule.setStartTime(scheduleDTO.getStartTime());
         schedule.setMovie(movie);
 
         scheduleRepo.save(schedule);
-
     }
 
     @Override
@@ -93,7 +87,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule sch = scheduleRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
 
-        Movie movie = movieService.findMovieNoDTO(scheduleDTO.getMovie_id());
+        Movie movie = movieRepo.findById(scheduleDTO.getMovie_id()).orElse(null);
 
         sch.setMovie(movie);
         sch.setStartTime(scheduleDTO.getStartTime());

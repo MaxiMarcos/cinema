@@ -15,7 +15,6 @@ public interface MovieService {
     
     public List<MovieDTO> getAllMovie();
     public MovieDTO findMovie(Long id);
-    public Movie findMovieNoDTO(Long id);
     public List<MovieDTO> findMovieByCategory(String category);
     public List<MovieDTO> findMovieByBillboard(String billboard);
     public void deleteMovie(Long id);

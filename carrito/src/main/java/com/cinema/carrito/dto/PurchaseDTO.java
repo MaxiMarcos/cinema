@@ -14,10 +14,10 @@ import java.util.List;
 public class PurchaseDTO {
 
 
-    private List<SimpleMovieDTO> movieDTO = new ArrayList<>();;
+    private List<MovieDTO> movieDTO = new ArrayList<>();;
    // private List<TheaterDTO> theaterDTO = new ArrayList<>();;
-    private List<SimpleSeatDTO> seatDTO = new ArrayList<>();;
-    private List<SimpleScheduleDTO> scheduleDTO = new ArrayList<>();;
+    private List<SeatDTO> seatDTO = new ArrayList<>();;
+    private List<ScheduleDTO> scheduleDTO = new ArrayList<>();;
     private double priceTotal;
 
     @JsonIgnore

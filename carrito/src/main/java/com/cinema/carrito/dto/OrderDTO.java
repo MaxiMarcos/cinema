@@ -18,7 +18,4 @@ import java.math.BigDecimal;
 public class OrderDTO {
 
     private PurchaseItem purchaseItem;
-    //private BigDecimal priceTotal;
-    //private int numProducts;
-
 }
