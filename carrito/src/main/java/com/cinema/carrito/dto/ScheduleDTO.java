@@ -13,5 +13,5 @@ import java.time.LocalDateTime;
 public class ScheduleDTO {
 
     private LocalDateTime startTime;
-    private Long movie_id;
+    private MovieDTO movie;
 }

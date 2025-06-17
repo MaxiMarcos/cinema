@@ -1,6 +1,7 @@
 package com.cinema.carrito.mapper;
 
 import com.cinema.carrito.dto.*;
+import com.cinema.carrito.entity.TheOrder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

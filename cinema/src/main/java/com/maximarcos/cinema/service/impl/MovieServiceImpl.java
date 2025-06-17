@@ -12,15 +12,9 @@ import com.maximarcos.cinema.mapper.MovieMapper;
 import com.maximarcos.cinema.repository.MovieRepository;
 import com.maximarcos.cinema.service.MovieService;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.UUID;
 
-import jakarta.persistence.criteria.Path;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,24 +29,21 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getAllMovie() {
 
         List<Movie> movies = movieRepo.findAll();
-        List<MovieDTO> moviesDTO = movieMapper.toListMovieDTO(movies);
-        return moviesDTO;
+        return movieMapper.toListMovieDTO(movies);
     }
 
     @Override
     public MovieDTO findMovie(Long id) {
 
         Movie movie = movieRepo.findById(id).orElse(null);
-        MovieDTO movieDTO = movieMapper.toMovieDTO(movie);
-
-        return movieDTO;
+        return movieMapper.toMovieDTO(movie);
     }
 
-    @Override
-    public Movie findMovieNoDTO(Long id) {
+   // @Override
+   // public Movie findMovieNoDTO(Long id) {
 
-        return movieRepo.findById(id).orElse(null);
-    }
+     //   return movieRepo.findById(id).orElse(null);
+   // }
 
     @Override
     public List<MovieDTO> findMovieByCategory(String category) {

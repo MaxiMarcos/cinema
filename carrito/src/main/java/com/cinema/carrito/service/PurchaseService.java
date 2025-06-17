@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PurchaseService {
 
-   PurchaseDTO addToCart(List<Long> movieIds, List<Long>scheduleIds, List<Long>SeatIds, PurchaseItem purchaseItem) throws SystemException;
+    PurchaseDTO addToCart (List<Long>scheduleIds, List<Long>SeatIds) throws SystemException;
 
     PurchaseItem getPurchase(Long id);
     List<PurchaseItem> getAllPurchase();

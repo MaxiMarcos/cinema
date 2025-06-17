@@ -1,6 +1,7 @@
 package com.cinema.carrito.controller;
 
 import com.cinema.carrito.dto.OrderDTO;
+import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.entity.TheOrder;
 import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.service.OrderService;
@@ -19,20 +20,6 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
-
-    //Se produce la compra de lo que hay en el carrito
-    @PostMapping("/create")
-    public ResponseEntity createOrder(@RequestBody OrderDTO orderDTO){
-
-        try {
-            orderService.createOrder(orderDTO);
-            return new ResponseEntity<>("The order was created correctly", HttpStatus.CREATED);
-
-        } catch (Exception e) {
-
-            return new ResponseEntity<>("There was an error creating the schedule: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @GetMapping("/get/{id}")
     public ResponseEntity getOrder(@PathVariable Long id){
