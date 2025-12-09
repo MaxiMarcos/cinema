@@ -1,0 +1,64 @@
+* {
+    background-color: black;  
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: black;  
+}
+
+.header{
+
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+}
+
+.nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+.nav ul li a:hover {
+    color: #e72d2d;
+}
+
+
+main{
+    
+}
+
+
+.movie-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.movie-card img {
+    height: 300px;
+    object-fit: cover;
+}

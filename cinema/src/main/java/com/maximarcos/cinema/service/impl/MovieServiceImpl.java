@@ -57,7 +57,10 @@ public class MovieServiceImpl implements MovieService {
 
         Billboard bil = Billboard.valueOf(billboard.toUpperCase());
 
-        return movieRepo.findMoviesByBillboard(bil);
+        List<Movie> movies = movieRepo.findMoviesByBillboard(bil);
+
+        List<MovieDTO> moviesdto = movieMapper.toListMovieDTO(movies);
+        return  moviesdto;
     }
 
     @Override

@@ -18,7 +18,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<MovieDTO> findMoviesByCategory(@Param("category") Category category);
 
     @Query("SELECT m FROM Movie m WHERE m.billboard = :billboard")
-    List<MovieDTO> findMoviesByBillboard(@Param("billboard") Billboard billboard);
+    List<Movie> findMoviesByBillboard(@Param("billboard") Billboard billboard);
 
     boolean existsByName(String name);
 }

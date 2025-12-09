@@ -23,8 +23,6 @@ public class MovieDTO {
     private String subtitle;
     private String description;
     private String photo;
-
-    private Category category;
-
     private Billboard billboard;
+    private Category category;
 }
