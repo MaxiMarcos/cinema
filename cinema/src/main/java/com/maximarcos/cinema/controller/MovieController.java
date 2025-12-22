@@ -91,6 +91,16 @@ public class MovieController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/findbylanguage/{language}")
+    public ResponseEntity<List<MovieDTO>> findMovieByLanguage(@PathVariable String language){
+        try{
+            List<MovieDTO>movieDTOS = movieServ.findMovieByLanguage(language);
+            return ResponseEntity.ok(movieDTOS);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
     
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable Long id){

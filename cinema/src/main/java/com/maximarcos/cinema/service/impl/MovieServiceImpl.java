@@ -49,7 +49,10 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> findMovieByCategory(String category) {
 
         Category cat = Category.valueOf(category.toUpperCase());
-        return movieRepo.findMoviesByCategory(cat);
+
+        List<MovieDTO> dto = movieMapper.toListMovieDTO(movieRepo.findMoviesByCategory(cat));
+
+        return dto;
     }
 
     @Override
@@ -57,10 +60,17 @@ public class MovieServiceImpl implements MovieService {
 
         Billboard bil = Billboard.valueOf(billboard.toUpperCase());
 
-        List<Movie> movies = movieRepo.findMoviesByBillboard(bil);
+        List<MovieDTO> dto = movieMapper.toListMovieDTO(movieRepo.findMoviesByBillboard(bil));
 
-        List<MovieDTO> moviesdto = movieMapper.toListMovieDTO(movies);
-        return  moviesdto;
+        return dto;
+    }
+
+    @Override
+    public List<MovieDTO> findMovieByLanguage(String language) {
+
+        List<MovieDTO> dto = movieMapper.toListMovieDTO(movieRepo.findMoviesByLanguage(language));
+
+        return dto;
     }
 
     @Override

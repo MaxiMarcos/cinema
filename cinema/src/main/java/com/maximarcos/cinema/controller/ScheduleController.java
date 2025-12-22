@@ -51,7 +51,7 @@ public class ScheduleController {
         }
     }
 
-    @GetMapping("/findScheduleByMovie/{movieId}") // modificar a minuscula
+    @GetMapping("/findschedulebymovie/{movieId}") // modificar a minuscula
     public ResponseEntity<?> findScheduleByMovie(@PathVariable Long movieId){
 
         try {

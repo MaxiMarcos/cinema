@@ -1,8 +1,23 @@
-async function fetchMovies(billboardType) {
+const movieCards = document.querySelectorAll('.movie-card');
+
+
+
+async function fetchMovies(type, isLanguage = false) {
     try {
-        const response = await fetch(`http://localhost:9011/movie/findbybillboard/${billboardType}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        let url;
+        if (isLanguage) {
+            url = `http://localhost:9011/movie/findbylanguage/${type}`;
+        } else {
+            url = `http://localhost:9011/movie/findbybillboard/${type}`;
+        }
+        console.log(`Fetching from URL: ${url}`); // Log de la URL
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status} for URL: ${url}`); // Log de error HTTP
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const movies = await response.json();
+        console.log(`Response from ${url}:`, movies); // Log de la respuesta
         return movies;
     } catch (error) {
         console.error('Error fetching movies:', error);
@@ -16,6 +31,7 @@ function renderMovies(movies, selector) {
         console.error(`Container with selector ${selector} not found.`);
         return;
     }
+    console.log(`Rendering movies to ${selector}:`, movies); // Log de las películas a renderizar
     container.innerHTML = ''; // Clear existing content
 
     movies.forEach(movie => {
@@ -26,7 +42,7 @@ function renderMovies(movies, selector) {
                     <div class="card-body">
                         <h5 class="card-title">${movie.name}</h5>
                         <p class="card-text">${movie.category} · ${movie.language}</p>
-                        <a href="#" class="btn btn-primary w-100">Ver más</a>
+                        <a href="movie.html?id=${movie.id}" class="btn btn-primary w-100">Comprar</a>
                     </div>
                 </div>
             </div>
@@ -36,12 +52,28 @@ function renderMovies(movies, selector) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Fetch and render movies for "Estrenos" (Billboard.PREMIERE)
-    const premiereMovies = await fetchMovies('ONSALE');
-    renderMovies(premiereMovies, '#moviesEstrenos');
+    // Cargar y renderizar películas para "Estrenos" (Billboard.ONSALE) por defecto
+    let currentMovies = await fetchMovies('ONSALE');
+    renderMovies(currentMovies, '#moviesEstrenos');
 
-    // You might want to fetch and render other billboard types here if you have more sections
-    // For example, for "Próximamente" (Billboard.COMING_SOON)
-    // const comingSoonMovies = await fetchMovies('COMING_SOON');
-    // renderMovies(comingSoonMovies, 'someOtherContainerId');
+    const filterButtons = document.querySelectorAll('.filter-buttons .btn');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const filterType = event.target.dataset.filter;
+            let moviesToRender = [];
+
+            if (filterType === 'subtitled') {
+                moviesToRender = await fetchMovies('English', true);
+            } else if (filterType === 'castellano') {
+                moviesToRender = await fetchMovies('Spanish', true);
+            } else if (filterType === 'premieres') {
+                moviesToRender = await fetchMovies('ONSALE'); // Mostrar todas las películas de estreno
+            }
+            renderMovies(moviesToRender, '#moviesEstrenos');
+        });
+    });
 });

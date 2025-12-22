@@ -29,6 +29,55 @@
 	</header>
 
 	<main>
+
+        <!-- Seccion publicidad carrusel -->
+
+        <section class="publicidad container">
+
+    <div id="carouselPublicidad" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <img src="img/pelis.jpg" class="d-block w-100" alt="Publicidad 1">
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <img src="img/mc.jpg" class="d-block w-100" alt="Publicidad 2">
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <img src="img/coca.jpg" class="d-block w-100" alt="Publicidad 3">
+            </div>
+
+        </div>
+
+        <!-- Controles del carrusel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPublicidad" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselPublicidad" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+    </div>
+</section>
+
+
+
+        <section class="filter-buttons container mb-4">
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-outline-light" data-filter="subtitled">Subtitulado</button>
+                <button class="btn btn-outline-light" data-filter="castellano">Castellano</button>
+                <button class="btn btn-outline-light" data-filter="premieres">Recién Estrenadas</button>
+            </div>
+        </section>
+
+        <!-- Seccion pelis -->
 	<section class="estrenos container">
     <h2 class="text-center mb-4">Estrenos</h2>
 
@@ -45,13 +94,6 @@
 
         </div>
 
-        <!-- Controles -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselEstrenos" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselEstrenos" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
     </div>
 </section>
 

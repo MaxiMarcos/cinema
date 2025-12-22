@@ -15,10 +15,14 @@ import org.springframework.stereotype.Repository;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     
     @Query("SELECT m FROM Movie m WHERE m.category = :category")
-    List<MovieDTO> findMoviesByCategory(@Param("category") Category category);
+    List<Movie> findMoviesByCategory(@Param("category") Category category);
 
     @Query("SELECT m FROM Movie m WHERE m.billboard = :billboard")
     List<Movie> findMoviesByBillboard(@Param("billboard") Billboard billboard);
+
+    @Query("SELECT m FROM Movie m WHERE m.language = UPPER(:language)")
+    List<Movie> findMoviesByLanguage(@Param("language") String language);
+
 
     boolean existsByName(String name);
 }
