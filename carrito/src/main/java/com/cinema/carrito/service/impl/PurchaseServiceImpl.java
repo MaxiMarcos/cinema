@@ -5,12 +5,12 @@ import com.cinema.carrito.entity.PurchaseItem;
 import com.cinema.carrito.enums.Status;
 import com.cinema.carrito.mapper.mapperDTOs;
 import com.cinema.carrito.repository.MovieClientAPI;
+import com.cinema.carrito.repository.PurchaseItemRepository;
 import com.cinema.carrito.repository.PurchaseRepository;
 import com.cinema.carrito.repository.SeatClientAPI;
 import com.cinema.carrito.service.PurchaseService;
 import jakarta.transaction.SystemException;
 import jakarta.transaction.TransactionManager;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import com.cinema.carrito.exception.ValidationException;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
     @Autowired
-    PurchaseRepository purchaseRepo;
+    PurchaseItemRepository purchaseRepo;
     @Autowired
     MovieClientAPI MovieAPI;
     @Autowired
@@ -85,21 +87,40 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
             if (validatePurchaseItem(seats, schedules, movies, theaters)) {
-                purchaseItem.setMoviee(movies.stream().map(MovieDTO::getName).collect(Collectors.toList()));
+                if (movies.get(0) == null) {
+                    throw new RuntimeException("Validation failed: MovieDTO is null.");
+                }
+                if (seats.get(0) == null) {
+                    throw new RuntimeException("Validation failed: SeatDTO is null.");
+                }
+                if (schedules.get(0) == null) {
+                    throw new RuntimeException("Validation failed: ScheduleDTO is null.");
+                }
+                purchaseItem.setMovieId(movies.get(0).getId());
                 purchaseItem.setTotalPrice(price);
-                purchaseItem.setSeat(seats.stream().map(SeatDTO::getNumber).collect(Collectors.toList()));
-                purchaseItem.setSchedule(schedules.stream().map(ScheduleDTO::getStartTime).collect(Collectors.toList()));
+                purchaseItem.setSeatId(seatIds.get(0));
+                purchaseItem.setScheduleId(schedules.get(0).getMovie().getId());
+                purchaseItem.setTheaterId(schedules.get(0).getTheaterId());
 
                 purchaseRepo.save(purchaseItem);
 
             }
 
             PurchaseDTO purchaseDTO = new PurchaseDTO();
-            purchaseDTO.setSeatDTO(seats);
-            purchaseDTO.setScheduleDTO(schedules);
-            purchaseDTO.setPriceTotal(price);
-            purchaseDTO.setMovieDTO(movies);
-            purchaseDTO.setUpdatedSeatIds(updatedSeatIds);
+            if (seats.get(0) == null) {
+                throw new RuntimeException("Validation failed: SeatDTO is null for PurchaseDTO.");
+            }
+            if (schedules.get(0) == null) {
+                throw new RuntimeException("Validation failed: ScheduleDTO is null for PurchaseDTO.");
+            }
+            if (movies.get(0) == null) {
+                throw new RuntimeException("Validation failed: MovieDTO is null for PurchaseDTO.");
+            }
+            purchaseDTO.setSeat(seats.get(0));
+            purchaseDTO.setSchedule(schedules.get(0));
+            purchaseDTO.setPrice(price);
+            purchaseDTO.setMovie(movies.get(0));
+            //purchaseDTO.setUpdatedSeatIds(updatedSeatIds);
 
             return purchaseDTO;
 
@@ -132,13 +153,13 @@ public class PurchaseServiceImpl implements PurchaseService {
             List<TheaterDTO> theaters
     ) {
         if (seats == null || seats.isEmpty()) {
-            throw new ValidationException("Validation failed: The seat list is null or empty.");
+            throw new RuntimeException("Validation failed: The seat list is null or empty.");
         }
         if (schedules == null || schedules.isEmpty()) {
-            throw new ValidationException("Validation failed: The schedules list is null or empty.");
+            throw new RuntimeException("Validation failed: The schedules list is null or empty.");
         }
         if (movies == null || movies.isEmpty()) {
-            throw new ValidationException("Validation failed: The movie list is null or empty.");
+            throw new RuntimeException("Validation failed: The movie list is null or empty.");
         }
 
 
@@ -153,7 +174,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
             if (!isSeatValid) {
-                throw new ValidationException(
+                throw new RuntimeException(
                         "Validation failed: Seat number " + seat.getNumber() + " does not belong to any schedule's theater."
                 );
             }
@@ -170,7 +191,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
             if (!isScheduleValid) {
-                throw new ValidationException(
+                throw new RuntimeException(
                         "Validation failed: Schedule " + schedule.getStartTime() + " is not related to any movie."
                 );
             }
@@ -198,15 +219,74 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public void editStatusPurchase(Long id, Status COMPLETED) {
+    public void editStatusPurchase(Long id, Status status) {
 
         PurchaseItem purchaseItem = purchaseRepo.findById(id).orElse(null);
 
-        purchaseItem.setStatus(COMPLETED);
+        purchaseItem.setStatus(status);
+
+        if (status == Status.CANCELED) {
+            try {
+                SeatAPI.editStatusSeat(purchaseItem.getSeatId(), true);
+                System.out.println("Asiento " + purchaseItem.getSeatId() + " liberado debido a cancelación de reserva.");
+            } catch (Exception e) {
+                System.err.println("Error al liberar el asiento " + purchaseItem.getSeatId() + ": " + e.getMessage());
+            }
+        }
 
         purchaseRepo.save(purchaseItem);
 
     }
 
+   @Override
+    public List<Long> findOccupiedSeatIdsByScheduleId(Long scheduleId) {
+        return purchaseRepo.findByScheduleIdAndStatusIn(scheduleId, Arrays.asList(Status.PENDING, Status.COMPLETED))
+                .stream()
+                .map(PurchaseItem::getSeatId)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public PurchaseItem createPendingPurchaseItem(Long scheduleId, Long seatId) {
+        List<PurchaseItem> existingPurchases = purchaseRepo.findByScheduleIdAndSeatIdAndStatusIn(
+                scheduleId, seatId, Arrays.asList(Status.PENDING, Status.COMPLETED));
+
+        if (!existingPurchases.isEmpty()) {
+            throw new ValidationException("El asiento " + seatId + " para el horario " + scheduleId + " ya está ocupado o pendiente de compra.");
+        }
+
+        PurchaseItem purchaseItem = new PurchaseItem();
+        purchaseItem.setScheduleId(scheduleId);
+        purchaseItem.setSeatId(seatId);
+        purchaseItem.setStatus(Status.PENDING);
+
+        try {
+            // Obtener el precio del asiento
+            SeatDTO seatDTO = SeatAPI.getSeat(seatId);
+            if (seatDTO != null) {
+                purchaseItem.setTotalPrice(seatDTO.getPrice());
+            } else {
+                System.err.println("SeatDTO es null para seatId: " + seatId);
+                // Manejar el caso donde el asiento no se encuentra
+            }
+
+            // Obtener movieId y theaterId del schedule
+            ScheduleDTO scheduleDTO = MovieAPI.getSchedule(scheduleId);
+            if (scheduleDTO != null) {
+                if (scheduleDTO.getMovie() != null) {
+                    purchaseItem.setMovieId(scheduleDTO.getMovie().getId());
+                }
+                purchaseItem.setTheaterId(scheduleDTO.getTheaterId());
+            } else {
+                System.err.println("ScheduleDTO es null para scheduleId: " + scheduleId);
+                // Manejar el caso donde el schedule no se encuentra
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error al obtener detalles para crear PurchaseItem pendiente: " + e.getMessage());
+            // Dependiendo de la lógica de negocio, podrías lanzar una excepción o devolver null
+        }
+
+        return purchaseRepo.save(purchaseItem);
+    }
 }

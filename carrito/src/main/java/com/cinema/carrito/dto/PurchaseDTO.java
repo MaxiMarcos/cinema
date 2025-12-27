@@ -13,13 +13,10 @@ import java.util.List;
 @Builder
 public class PurchaseDTO {
 
-
-    private List<MovieDTO> movieDTO = new ArrayList<>();;
-   // private List<TheaterDTO> theaterDTO = new ArrayList<>();;
-    private List<SeatDTO> seatDTO = new ArrayList<>();;
-    private List<ScheduleDTO> scheduleDTO = new ArrayList<>();;
-    private double priceTotal;
-
-    @JsonIgnore
-    private List<Long> updatedSeatIds = new ArrayList<>();
+        private Long id;
+        private MovieDTO movie;
+        private ScheduleDTO schedule;
+        private TheaterDTO theater;
+        private SeatDTO seat;
+        private double price;
 }

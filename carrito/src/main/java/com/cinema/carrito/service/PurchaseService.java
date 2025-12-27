@@ -19,5 +19,9 @@ public interface PurchaseService {
 
     void deletePurchase(Long id);
 
-    void editStatusPurchase(Long id, Status COMPLETED);
+    void editStatusPurchase(Long id, Status status);
+
+    List<Long> findOccupiedSeatIdsByScheduleId(Long scheduleId);
+
+    PurchaseItem createPendingPurchaseItem(Long scheduleId, Long seatId);
 }

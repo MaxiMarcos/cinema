@@ -94,4 +94,10 @@ public class SeatServiceImpl implements SeatService {
 
         System.out.println("llamando al método del service theater:" + newSeat.getIsAvailable());
     }
+
+    @Override
+    public List<SeatDTO> byTheaterId(Long theaterId) {
+        List<Seat> seats = seatRepo.findByTheaterId(theaterId);
+        return seatMapper.convertToListDto(seats);
+    }
 }

@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL) // ignora y no retorna los valores null (me sirve para la función findScheduleByMovie)
 public class ScheduleDTO {
 
+    private Long id;
     private LocalDateTime startTime;
     private Long movie_id;
+    private Long theaterId;
 }

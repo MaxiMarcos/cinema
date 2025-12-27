@@ -5,6 +5,7 @@ import com.cinema.carrito.converter.TimeListConverter;
 import com.cinema.carrito.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,19 +25,16 @@ public class PurchaseItem {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = StringListConverter.class) // recibo un string, quizas sea mejor
-                                                    // recibir un objeto Movie por relación de entidades
-
-    private List<String> moviee = new ArrayList<>();
-
-    @Convert(converter = StringListConverter.class)
-    private List<String> seat = new ArrayList<>();
-
-    @Convert(converter = TimeListConverter.class)
-    private List<LocalDateTime> schedule = new ArrayList<>();
+    private Long movieId;
+    private Long scheduleId;
+    private Long theaterId;
+    private Long seatId;
 
     private double totalPrice;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

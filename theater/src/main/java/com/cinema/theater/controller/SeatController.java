@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/seat")
 public class SeatController {
@@ -94,5 +95,15 @@ public class SeatController {
 
         seatService.editStatusSeat(id, isAvailable);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/byTheater/{theaterId}")
+    public ResponseEntity<List<SeatDTO>> getSeatsByTheaterId(@PathVariable Long theaterId) {
+        try {
+            List<SeatDTO> seatDTOs = seatService.byTheaterId(theaterId);
+            return new ResponseEntity<>(seatDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

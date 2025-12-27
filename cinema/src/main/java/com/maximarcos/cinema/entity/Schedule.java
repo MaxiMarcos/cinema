@@ -30,4 +30,6 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    private Long theaterId; //referencia por id
 }

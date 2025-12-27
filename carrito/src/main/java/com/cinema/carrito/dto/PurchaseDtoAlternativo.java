@@ -15,8 +15,8 @@ import java.util.List;
 @Builder
 public class PurchaseDtoAlternativo {
 
-    private List<String> seat;
-    private List<LocalDateTime> schedule;
+    private Long seatId;
+    private Long scheduleId;
     private double totalPrice;
     private Status status;
 }

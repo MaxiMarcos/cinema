@@ -22,8 +22,10 @@ public class ScheduleMapper {
         Movie movie = schedule.getMovie();
 
         return ScheduleDTO.builder()
+                .id(schedule.getId())
                 .startTime(schedule.getStartTime())
                 .movie_id(movie.getId())
+                .theaterId(schedule.getTheaterId())
                 .build();
 
     }

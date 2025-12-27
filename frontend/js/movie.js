@@ -40,7 +40,7 @@ async function fetchSchedules(movieId) {
         }
         const schedules = await response.json();
         console.log(`Response for schedules for movie ID ${movieId}:`, schedules);
-        renderSchedules(schedules, movieId);
+        renderSchedules(schedules);
     } catch (error) {
         console.error('Error fetching schedules:', error);
     }
@@ -64,13 +64,12 @@ function renderMovieDetail(movie) {
                 <p class="card-text"><strong>Idioma:</strong> ${movie.language}</p>
                 <p class="card-text"><strong>Subtítulos:</strong> ${movie.subtitle ? movie.subtitle : 'N/A'}</p>
                 <p class="card-text">${movie.description}</p>
-                <a href="reserve.html?movieId=${movie.id}" class="btn btn-primary">Reservar entrada</a>
             </div>
         </div>
     `;
 }
 
-function renderSchedules(schedules, movieId) {
+function renderSchedules(schedules) {
     const schedulesContainer = document.getElementById('schedules-container');
     if (!schedulesContainer) {
         console.error('Schedules container not found.');
@@ -82,15 +81,19 @@ function renderSchedules(schedules, movieId) {
         return;
     }
 
+    // Ordenar los horarios del más próximo al más lejano
+    schedules.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
     schedulesContainer.innerHTML = schedules.map(schedule => {
         const startTime = new Date(schedule.startTime);
-        const formattedTime = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const formattedDate = startTime.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        const formattedTime = startTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         return `
             <div class="col-md-3 mb-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">${formattedTime}</h5>
-                        <a href="reserve.html?movieId=${movieId}&scheduleTime=${schedule.startTime}" class="btn btn-secondary">Seleccionar</a>
+                <div class="card text-center bg-black">
+                    <div class="card-body text-white">
+                        <h5 class="card-title">${formattedDate} ${formattedTime}</h5>
+                        <a href="reserve.html?scheduleId=${schedule.id}&theaterId=${schedule.theaterId}" class="btn btn-danger">Seleccionar</a>
                     </div>
                 </div>
             </div>

@@ -19,4 +19,6 @@ public interface SeatService {
     SeatDTO editSeat(Long id, Seat seat);
 
     void editStatusSeat(Long id, boolean isAvailable);
+
+    List<SeatDTO> byTheaterId(Long theaterId);
 }

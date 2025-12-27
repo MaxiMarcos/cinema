@@ -47,16 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleDTO> findScheduleByMovie(Long movieId) {
 
         List<Schedule> schedules = scheduleRepo.findSchedulesByMovie(movieId);
-        List<ScheduleDTO> scheduleDTOs = new ArrayList<>();
-
-        // Convertir cada Schedule en ScheduleDTO para retornarlos
-        for (Schedule schedule : schedules) {
-            ScheduleDTO dto = new ScheduleDTO();
-            dto.setStartTime(schedule.getStartTime());
-            scheduleDTOs.add(dto);
-        }
-
-        return scheduleDTOs;
+        return scheduleMapper.toListScheduleDTO(schedules);
     }
 
     @Override

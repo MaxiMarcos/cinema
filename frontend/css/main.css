@@ -1,8 +1,8 @@
-
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: black;
 }
 
 
@@ -53,15 +53,19 @@ html, body {
 
 
 main{
-    background-color: black;
+    background-color: rgb(14, 14, 14);
 }
 
 .estrenos h2 {
     color: white;
 }
 
+.card {
+    background-color: red;
+}
 
 .movie-card {
+    
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -91,4 +95,13 @@ main{
     width: 100%;
     height: 420px; /* Altura fija para todas las imágenes del carrusel */
     object-fit: cover;
+}
+
+footer {
+    background-color: black;
+}
+
+footer .fab {
+    color: white;
+    font-size: 1.5em; /* Ajusta el tamaño según sea necesario */
 }

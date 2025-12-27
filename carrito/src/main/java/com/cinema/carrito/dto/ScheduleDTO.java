@@ -14,4 +14,5 @@ public class ScheduleDTO {
 
     private LocalDateTime startTime;
     private MovieDTO movie;
+    private Long theaterId;
 }

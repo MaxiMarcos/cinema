@@ -11,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class SeatDTO {
 
+    private Long id;
     private int number;
     private double price;
     private Boolean isAvailable;

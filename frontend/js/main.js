@@ -36,13 +36,19 @@ function renderMovies(movies, selector) {
 
     movies.forEach(movie => {
         const movieCard = `
-            <div class="col-6 col-md-3">
-                <div class="card movie-card">
-                    <img src="http://localhost:9011/img/${movie.photo}" class="card-img-top" alt="${movie.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${movie.name}</h5>
-                        <p class="card-text">${movie.category} · ${movie.language}</p>
-                        <a href="movie.html?id=${movie.id}" class="btn btn-primary w-100">Comprar</a>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card movie-card h-100 bg-black text-white">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <img src="http://localhost:9011/img/${movie.photo}" class="img-fluid rounded-start" alt="${movie.name}">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title">${movie.name}</h5>
+                                <p class="card-text">${movie.category} · ${movie.language}</p>
+                                <a href="movie.html?id=${movie.id}" class="btn btn-danger w-100">Comprar</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,5 +81,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             renderMovies(moviesToRender, '#moviesEstrenos');
         });
+    });
+
+    // Dark Mode Toggle Logic
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const darkModeIcon = document.getElementById('darkModeIcon');
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light-mode') {
+        body.classList.add('light-mode');
+        darkModeIcon.src = 'img/modooscuro.png';
+        darkModeIcon.alt = 'Modo Oscuro';
+    } else {
+        darkModeIcon.src = 'img/modoclaro.png';
+        darkModeIcon.alt = 'Modo Claro';
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-mode');
+        if (body.classList.contains('light-mode')) {
+            localStorage.setItem('theme', 'light-mode');
+            darkModeIcon.src = 'img/modooscuro.png';
+            darkModeIcon.alt = 'Modo Oscuro';
+        } else {
+            localStorage.setItem('theme', 'dark-mode');
+            darkModeIcon.src = 'img/modoclaro.png';
+            darkModeIcon.alt = 'Modo Claro';
+        }
     });
 });

@@ -36,6 +36,7 @@ public class SeatMapper {
     public SeatDTO toSeatDTO(Seat seat) {
 
         return SeatDTO.builder()
+                .id(seat.getId())
                 .number(seat.getNumber())
                 .price(seat.getPrice())
                 .isAvailable(seat.getIsAvailable())

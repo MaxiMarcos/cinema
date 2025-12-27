@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/purchase")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class PurchaseController {
 
     @Autowired
@@ -56,16 +58,26 @@ public class PurchaseController {
     }
 
     @PutMapping("/editStatus/status")
-    public ResponseEntity editStatusPurchase(@RequestParam Long id, Status COMPLETED){
+    public ResponseEntity editStatusPurchase(@RequestParam Long id, @RequestParam Status status) {
 
         PurchaseItem purchaseItem = purchaseService.getPurchase(id);
 
         if(purchaseItem != null){
-            purchaseService.editStatusPurchase(id, COMPLETED);
+            purchaseService.editStatusPurchase(id, status);
             return new ResponseEntity<>("purchaseItem editado satisfactioriamente", HttpStatus.OK);
         }else {
             return new ResponseEntity<>("Hay error", HttpStatus.NO_CONTENT);
         }
     }
 
+    @GetMapping("/occupied-seats/{scheduleId}")
+    public List<Long> getOccupiedSeats(@PathVariable Long scheduleId) {
+        return purchaseService.findOccupiedSeatIdsByScheduleId(scheduleId);
+    }
+
+    @PostMapping("/create-pending")
+    public ResponseEntity<PurchaseItem> createPendingPurchaseItem(@RequestParam Long scheduleId, @RequestParam Long seatId) {
+        PurchaseItem purchaseItem = purchaseService.createPendingPurchaseItem(scheduleId, seatId);
+        return new ResponseEntity<>(purchaseItem, HttpStatus.CREATED);
+    }
 }
