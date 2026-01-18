@@ -37,4 +37,7 @@ public class PurchaseItem {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Column(unique = true, nullable = false, updatable = false)
+    private String reservationCode;
 }

@@ -19,4 +19,5 @@ public class PurchaseDTO {
         private TheaterDTO theater;
         private SeatDTO seat;
         private double price;
+        private String reservationCode;
 }

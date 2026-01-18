@@ -2,7 +2,6 @@
 package com.cinema.theater.service;
 
 import com.cinema.theater.dto.TheaterDTO;
-import com.cinema.theater.entity.Theater;
 import java.util.List;
 
 public interface TheaterService {

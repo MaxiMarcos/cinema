@@ -16,11 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import com.cinema.carrito.exception.ValidationException;
 
@@ -101,6 +99,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 purchaseItem.setSeatId(seatIds.get(0));
                 purchaseItem.setScheduleId(schedules.get(0).getMovie().getId());
                 purchaseItem.setTheaterId(schedules.get(0).getTheaterId());
+                purchaseItem.setReservationCode(generateReservationCode()); // Asignar código de reserva generado por el backend
 
                 purchaseRepo.save(purchaseItem);
 
@@ -131,6 +130,16 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
     }
+
+    private String generateReservationCode() {
+        return "RES-" +
+                LocalDate.now() + "-" +
+                UUID.randomUUID()
+                        .toString()
+                        .substring(0, 6)
+                        .toUpperCase();
+    }
+
 
     public void rollbackSeats(List<Long> updatedSeatIds) {
         if (updatedSeatIds == null || updatedSeatIds.isEmpty()) {
@@ -248,6 +257,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public PurchaseItem createPendingPurchaseItem(Long scheduleId, Long seatId) {
+
         List<PurchaseItem> existingPurchases = purchaseRepo.findByScheduleIdAndSeatIdAndStatusIn(
                 scheduleId, seatId, Arrays.asList(Status.PENDING, Status.COMPLETED));
 
@@ -259,6 +269,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseItem.setScheduleId(scheduleId);
         purchaseItem.setSeatId(seatId);
         purchaseItem.setStatus(Status.PENDING);
+        purchaseItem.setReservationCode(generateReservationCode());
 
         try {
             // Obtener el precio del asiento

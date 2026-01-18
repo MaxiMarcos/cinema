@@ -50,9 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdPurchaseIds.push(purchaseItem.id);
                     console.log(`PurchaseItem creado para el asiento ${seatId} con ID: ${purchaseItem.id}`);
                 }
-                alert('Asientos seleccionados y reserva pendiente creada.');
-                window.location.href = `confirm_purchase.html?purchaseIds=${createdPurchaseIds.join(',')}`;
-            } catch (error) {
+                const redirectUrl = `confirm_purchase.html?purchaseIds=${createdPurchaseIds.join(',')}&status=success`;
+                window.location.href = redirectUrl;            } catch (error) {
                 console.error('Error al procesar la reserva:', error);
                 alert('Hubo un error al procesar tu reserva. Inténtalo de nuevo.');
             }

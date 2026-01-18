@@ -19,7 +19,7 @@ public interface PurchaseService {
 
     void deletePurchase(Long id);
 
-    void editStatusPurchase(Long id, Status status);
+    void editStatusPurchase(Long id, Status COMPLETED);
 
     List<Long> findOccupiedSeatIdsByScheduleId(Long scheduleId);
 

@@ -1,7 +1,4 @@
 package com.cinema.theater.dto;
-
-import com.cinema.theater.entity.Theater;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter

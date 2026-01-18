@@ -1,10 +1,7 @@
 
 package com.cinema.theater.service.impl;
-
 import com.cinema.theater.dto.ScheduleDTO;
 import com.cinema.theater.dto.TheaterDTO;
-import com.cinema.theater.entity.Seat;
-import com.cinema.theater.mapper.SeatMapper;
 import com.cinema.theater.mapper.TheaterMapper;
 import com.cinema.theater.service.TheaterService;
 import com.cinema.theater.entity.Theater;
@@ -14,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;

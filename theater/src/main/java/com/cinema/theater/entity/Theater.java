@@ -1,7 +1,4 @@
-
 package com.cinema.theater.entity;
-
-import com.cinema.theater.dto.ScheduleDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

@@ -36,19 +36,16 @@ function renderMovies(movies, selector) {
 
     movies.forEach(movie => {
         const movieCard = `
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card movie-card h-100 bg-black text-white">
-                    <div class="row g-0">
-                        <div class="col-md-6">
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card movie-card bg-black text-white">
+                    <div class="movie-image-wrapper">
+                        <a href="movie.html?id=${movie.id}">
                             <img src="http://localhost:9011/img/${movie.photo}" class="img-fluid rounded-start" alt="${movie.name}">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <h5 class="card-title">${movie.name}</h5>
-                                <p class="card-text">${movie.category} · ${movie.language}</p>
-                                <a href="movie.html?id=${movie.id}" class="btn btn-danger w-100">Comprar</a>
-                            </div>
-                        </div>
+                        </a>
+                        <a href="movie.html?id=${movie.id}" class="btn btn-warning movie-card-cta">Ver horarios</a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.name}</h5>
                     </div>
                 </div>
             </div>
@@ -59,8 +56,11 @@ function renderMovies(movies, selector) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Cargar y renderizar películas para "Estrenos" (Billboard.ONSALE) por defecto
-    let currentMovies = await fetchMovies('ONSALE');
-    renderMovies(currentMovies, '#moviesEstrenos');
+    const moviesEstrenosContainer = document.querySelector('#moviesEstrenos');
+    if (moviesEstrenosContainer) {
+        let currentMovies = await fetchMovies('ONSALE');
+        renderMovies(currentMovies, '#moviesEstrenos');
+    }
 
     const filterButtons = document.querySelectorAll('.filter-buttons .btn');
 
@@ -72,43 +72,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             const filterType = event.target.dataset.filter;
             let moviesToRender = [];
 
-            if (filterType === 'subtitled') {
-                moviesToRender = await fetchMovies('English', true);
-            } else if (filterType === 'castellano') {
-                moviesToRender = await fetchMovies('Spanish', true);
-            } else if (filterType === 'premieres') {
-                moviesToRender = await fetchMovies('ONSALE'); // Mostrar todas las películas de estreno
+            if (filterType === 'ONSALE') {
+                moviesToRender = await fetchMovies('ONSALE');
+            } else if (filterType === 'SOON') {
+                moviesToRender = await fetchMovies('SOON');
             }
             renderMovies(moviesToRender, '#moviesEstrenos');
         });
-    });
+});
 
-    // Dark Mode Toggle Logic
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    const darkModeIcon = document.getElementById('darkModeIcon');
-
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light-mode') {
-        body.classList.add('light-mode');
-        darkModeIcon.src = 'img/modooscuro.png';
-        darkModeIcon.alt = 'Modo Oscuro';
-    } else {
-        darkModeIcon.src = 'img/modoclaro.png';
-        darkModeIcon.alt = 'Modo Claro';
+    // Lógica para la navbar transparente que se solidifica al hacer scroll
+    const navbar = document.querySelector('.nav');
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { // Cambia a sólido después de 50px de scroll
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
     }
-
-    darkModeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-mode');
-        if (body.classList.contains('light-mode')) {
-            localStorage.setItem('theme', 'light-mode');
-            darkModeIcon.src = 'img/modooscuro.png';
-            darkModeIcon.alt = 'Modo Oscuro';
-        } else {
-            localStorage.setItem('theme', 'dark-mode');
-            darkModeIcon.src = 'img/modoclaro.png';
-            darkModeIcon.alt = 'Modo Claro';
-        }
-    });
 });

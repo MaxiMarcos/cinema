@@ -1,25 +1,17 @@
 package com.cinema.theater.service.impl;
-
 import com.cinema.theater.dto.SeatDTO;
 import com.cinema.theater.entity.Seat;
-import com.cinema.theater.entity.Theater;
 import com.cinema.theater.mapper.SeatMapper;
 import com.cinema.theater.repository.SeatRepository;
 import com.cinema.theater.service.SeatService;
-import com.cinema.theater.service.TheaterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SeatServiceImpl implements SeatService {
     @Autowired
     SeatRepository seatRepo;
-
-    @Autowired
-    TheaterService theaterService;
 
     @Autowired
     SeatMapper seatMapper;

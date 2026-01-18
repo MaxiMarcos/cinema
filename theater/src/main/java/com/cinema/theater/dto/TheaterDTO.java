@@ -1,11 +1,6 @@
 
 package com.cinema.theater.dto;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
