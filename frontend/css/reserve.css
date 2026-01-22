@@ -1,9 +1,9 @@
 .seat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Ajusta el tamaño de los asientos */
-    gap: 10px;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 5px solid #c2e20e;
     border-radius: 8px;
     background-color: #f8f8f8;
 }

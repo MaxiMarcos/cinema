@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/final")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://127.0.0.1:5501"})
 public class createOrderWithCartController {
 
     @Autowired

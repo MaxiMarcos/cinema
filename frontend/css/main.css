@@ -239,3 +239,39 @@ footer img {
     color: #FFD700; /* Amarillo dorado en hover */
 }
 
+/* Estilos para los nuevos filtros de películas */
+.filter-buttons .filter-link {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    color: white;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.filter-buttons .filter-link:hover {
+    color: #FFD700; /* Dorado al pasar el ratón */
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+.filter-buttons .filter-link.active {
+    color: #FFD700; /* Dorado para el activo */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.filter-buttons .badge {
+    font-size: 0.6em;
+    vertical-align: super;
+    margin-left: 5px;
+    padding: 0.3em 0.6em;
+    border-radius: 0.25rem;
+}
+
+.filter-buttons .badge.bg-primary {
+    background-color: #E50914 !important; /* Rojo cine para el badge primario */
+}
+
+.filter-buttons .badge.bg-secondary {
+    background-color: #444 !important; /* Gris oscuro para el badge secundario */
+    color: #FFD700 !important;
+}
+

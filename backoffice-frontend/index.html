@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back Office - Cinema Microservicios</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="login-section" class="active d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
+            <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+            <form id="login-form" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuario:</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Por favor, ingrese su usuario.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Por favor, ingrese su contraseña.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                <p id="login-error" class="text-danger mt-3" style="display: none;">Usuario o contraseña incorrectos.</p>
+            </form>
+        </div>
+    </section>
+
+    <div id="app-wrapper" class="d-flex d-none">
+        <!-- Sidebar de Navegación -->
+        <nav id="sidebar" class="d-flex flex-column p-3 text-white vh-100">
+            <h4 class="mb-3">Administración</h4>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="nav-dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="nav-movies">Películas</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="nav-schedules">Horarios</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="nav-theaters">Salas</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="nav-seats">Asientos</a></li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/twbs.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>Usuario</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#" id="nav-logout">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <div id="main-content" class="flex-grow-1 p-4">
+            <section id="dashboard-section" class="d-none">
+                <h2 class="mb-4">Dashboard</h2>
+                <p>Bienvenido al panel de administración. Aquí podrás ver un resumen de la actividad.</p>
+                <!-- Contenido del dashboard -->
+            </section>
+
+            <section id="movies-section" class="d-none">
+                <h2 class="mb-4">Gestión de Películas</h2>
+                <button id="add-movie-btn" class="btn btn-success mb-3">Añadir Nueva Película</button>
+                <div id="movie-form-container" class="hidden p-4 border rounded bg-light mb-4">
+                    <h3 class="mb-3">Añadir/Editar Película</h3>
+                    <form id="movie-form">
+                        <input type="hidden" id="movie-id">
+                        <div class="mb-3">
+                            <label for="movie-name" class="form-label">Nombre:</label>
+                            <input type="text" id="movie-name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="movie-description" class="form-label">Descripción:</label>
+                            <textarea id="movie-description" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="movie-language" class="form-label">Idioma:</label>
+                            <input type="text" id="movie-language" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="movie-category" class="form-label">Categoría:</label>
+                            <select id="movie-category" class="form-select" required>
+                                <option value="">Seleccione una categoría</option>
+                                <option value="ACTION">ACCIÓN</option>
+                                <option value="COMEDY">COMEDIA</option>
+                                <option value="DRAMA">DRAMA</option>
+                                <option value="HORROR">TERROR</option>
+                                <option value="SCIFI">CIENCIA FICCIÓN</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="movie-billboard" class="form-label">Cartelera:</label>
+                            <select id="movie-billboard" class="form-select" required>
+                                <option value="">Seleccione estado de cartelera</option>
+                                <option value="IN_BILLBOARD">EN CARTELERA</option>
+                                <option value="COMING_SOON">PRÓXIMAMENTE</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Guardar Película</button>
+                        <button type="button" id="cancel-movie-form" class="btn btn-secondary">Cancelar</button>
+                    </form>
+                </div>
+                <div id="movies-list" class="list-group">
+                    <!-- Las películas se cargarán aquí -->
+                </div>
+            </section>
+
+            <section id="schedules-section" class="d-none">
+                <h2 class="mb-4">Gestión de Horarios</h2>
+                <button id="add-schedule-btn" class="btn btn-success mb-3">Añadir Nuevo Horario</button>
+                <div id="schedule-form-container" class="d-none p-4 border rounded bg-light mb-4">
+                    <h3 class="mb-3">Añadir/Editar Horario</h3>
+                    <form id="schedule-form">
+                        <input type="hidden" id="schedule-id">
+                        <div class="mb-3">
+                            <label for="schedule-movie-id" class="form-label">ID de Película:</label>
+                            <input type="number" id="schedule-movie-id" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="schedule-start-time" class="form-label">Hora de Inicio:</label>
+                            <input type="datetime-local" id="schedule-start-time" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Guardar Horario</button>
+                        <button type="button" id="cancel-schedule-form" class="btn btn-secondary">Cancelar</button>
+                    </form>
+                </div>
+                <div id="schedules-list">
+                    <!-- Los horarios se cargarán aquí -->
+                </div>
+            </section>
+
+            <section id="theaters-section" class="d-none">
+                <h2>Gestión de Salas</h2>
+                <button id="add-theater-btn">Añadir Nueva Sala</button>
+                <div id="theater-form-container" class="hidden">
+                    <h3>Añadir/Editar Sala</h3>
+                    <form id="theater-form">
+                        <input type="hidden" id="theater-id">
+                        <label for="theater-name">Nombre:</label>
+                        <input type="text" id="theater-name" required>
+                        <label for="theater-capacity">Capacidad:</label>
+                        <input type="number" id="theater-capacity" required>
+                        <label for="theater-screen-type">Tipo de Pantalla:</label>
+                        <input type="text" id="theater-screen-type" required>
+                        <label for="theater-schedule-ids">IDs de Horarios (separados por comas):</label>
+                        <input type="text" id="theater-schedule-ids">
+                        <button type="submit">Guardar Sala</button>
+                        <button type="button" id="cancel-theater-form">Cancelar</button>
+                    </form>
+                </div>
+                <div id="theaters-list">
+                    <!-- Las salas se cargarán aquí -->
+                </div>
+            </section>
+
+            <section id="seats-section" class="d-none">
+                <h2>Gestión de Asientos</h2>
+                <button id="add-seat-btn">Añadir Nuevo Asiento</button>
+                <button id="add-multiple-seats-btn">Añadir Múltiples Asientos</button>
+                <div id="seat-form-container" class="hidden">
+                    <h3>Añadir/Editar Asiento</h3>
+                    <form id="seat-form">
+                        <input type="hidden" id="seat-id">
+                        <label for="seat-number">Número:</label>
+                        <input type="number" id="seat-number" required>
+                        <label for="seat-price">Precio:</label>
+                        <input type="number" step="0.01" id="seat-price" required>
+                        <label for="seat-is-available">Disponible:</label>
+                        <input type="checkbox" id="seat-is-available">
+                        <label for="seat-theater-id">ID de Sala:</label>
+                        <input type="number" id="seat-theater-id" required>
+                        <button type="submit">Guardar Asiento</button>
+                        <button type="button" id="cancel-seat-form">Cancelar</button>
+                    </form>
+                </div>
+                <div id="multiple-seats-form-container" class="hidden">
+                    <h3>Añadir Múltiples Asientos</h3>
+                    <form id="multiple-seats-form">
+                        <label for="multiple-seats-theater-id">ID de Sala:</label>
+                        <input type="number" id="multiple-seats-theater-id" required>
+                        <button type="submit">Crear Asientos</button>
+                        <button type="button" id="cancel-multiple-seats-form">Cancelar</button>
+                    </form>
+                </div>
+                <div id="seats-list">
+                    <!-- Los asientos se cargarán aquí -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Contenedor para los toasts de Bootstrap -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11;">
+        <!-- Los toasts se inyectarán aquí -->
+    </div>
+
+    <!-- Scripts de Bootstrap JS (Bundle con Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>

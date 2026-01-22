@@ -1,0 +1,9 @@
+com\cinema\authservice\dto\AuthRequest.class
+com\cinema\authservice\model\User.class
+com\cinema\authservice\controller\AuthServiceController.class
+com\cinema\authservice\jwt\JwtUtil.class
+com\cinema\authservice\config\SecurityConfig.class
+com\cinema\authservice\jwt\JwtRequestFilter.class
+com\cinema\authservice\AuthServiceApplication.class
+com\cinema\authservice\repository\UserRepository.class
+com\cinema\authservice\dto\AuthResponse.class

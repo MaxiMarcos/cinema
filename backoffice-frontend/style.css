@@ -1,0 +1,246 @@
+/* style.css */
+/* Los estilos personalizados se añadirán aquí para complementar a Bootstrap */
+
+/* Variables CSS para colores retro de cine */
+:root {
+    --retro-red: #6B0000; /* Rojo oscuro */
+    --retro-gold: #B8860B; /* Dorado más oscuro */
+    --retro-cream: #E0E0E0; /* Crema suave para fondos o texto */
+    --retro-dark-blue: #000040; /* Azul marino muy profundo */
+    --retro-dark-gray: #1a1a1a; /* Gris muy oscuro */
+    --retro-light-gray: #555555; /* Gris claro para bordes o texto secundario */
+    --retro-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Sombra de texto para un efecto 3D más pronunciado */
+}
+
+body {
+    font-family: 'Georgia', serif; /* Fuente serif clásica para un toque retro */
+    background-color: var(--retro-dark-gray);
+    color: var(--retro-cream);
+    line-height: 1.6;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9IiM0NDQ0NDQiIGZpbGwtb3BhY2l0eT0iMC40IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGQ9Ik01IDBMNSAzIDAgMyAwIDVMNSAxMEw1IDEzIDAgMTMgMCAxNUw1IDIwTDUgMjMgMCAyMyAwIDI1TDUgMzBIMFYwSDVaTTEwIDBMNSAzIDUgNUwxMCA1TDEwIDBaTTEwIDEwTDUgMTMgNSAxNUwxMCAxNUwxMCAxMFpNMTAgMjBMNSAyMyA1IDI1TDEwIDI1TDEwIDIwWiIvPgogICAgPC9nPgogPC9zdmc+'); /* Patrón sutil de fondo */
+}
+
+/* Estilos para el contenedor principal de la aplicación */
+#app-wrapper {
+    min-height: 100vh;
+    background-color: var(--retro-dark-gray);
+}
+
+/* Estilos para la barra lateral de navegación */
+#sidebar {
+    width: 250px;
+    background-color: var(--retro-dark-blue); /* Fondo azul oscuro para la barra lateral */
+    border-right: 3px solid var(--retro-gold);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    padding-top: 20px;
+}
+
+#sidebar h4 {
+    color: var(--retro-gold);
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: var(--retro-text-shadow);
+}
+
+#sidebar .nav-link {
+    color: var(--retro-cream) !important;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
+}
+
+#sidebar .nav-link:hover, #sidebar .nav-link.active {
+    background-color: var(--retro-red) !important;
+    color: var(--retro-gold) !important;
+    text-shadow: var(--retro-text-shadow);
+}
+
+#sidebar .dropdown-toggle {
+    color: var(--retro-cream) !important;
+}
+
+#sidebar .dropdown-menu {
+    background-color: var(--retro-dark-blue);
+    border: 1px solid var(--retro-gold);
+}
+
+#sidebar .dropdown-item {
+    color: var(--retro-cream);
+}
+
+#sidebar .dropdown-item:hover {
+    background-color: var(--retro-red);
+    color: var(--retro-gold);
+}
+
+/* Estilos para el contenido principal */
+#main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: var(--retro-dark-gray);
+}
+
+/* Estilo para el encabezado - como un letrero de cine antiguo */
+header {
+    background-color: var(--retro-red) !important; /* Rojo intenso */
+    border-bottom: 5px solid var(--retro-gold); /* Borde dorado */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 20px; /* Espacio debajo del encabezado */
+}
+
+header h1 {
+    font-family: 'Impact', sans-serif; /* Fuente impactante para el título */
+    color: var(--retro-gold);
+    text-shadow: var(--retro-text-shadow);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+header .nav-link {
+    color: var(--retro-cream) !important;
+    font-weight: bold;
+    text-shadow: var(--retro-text-shadow);
+    transition: color 0.3s ease;
+}
+
+header .nav-link:hover {
+    color: var(--retro-gold) !important;
+}
+
+/* Estilo para las tarjetas (formularios, secciones) */
+.card {
+    background-color: var(--retro-dark-blue); /* Fondo azul oscuro */
+    border: 2px solid var(--retro-gold); /* Borde dorado */
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+}
+
+.card-title {
+    color: var(--retro-gold);
+    text-shadow: var(--retro-text-shadow);
+    font-family: 'Impact', sans-serif;
+    letter-spacing: 1px;
+}
+
+/* Estilo para botones */
+.btn-primary {
+    background-color: var(--retro-gold) !important;
+    border-color: var(--retro-gold) !important;
+    color: var(--retro-dark-gray) !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #e6b800 !important; /* Dorado un poco más oscuro al pasar el ratón */
+    border-color: #e6b800 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-success {
+    background-color: var(--retro-red) !important;
+    border-color: var(--retro-red) !important;
+    color: var(--retro-cream) !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #a00000 !important; /* Rojo un poco más oscuro al pasar el ratón */
+    border-color: #a00000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--retro-dark-blue) !important;
+    border-color: var(--retro-dark-blue) !important;
+    color: var(--retro-cream) !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #000066 !important; /* Azul un poco más oscuro al pasar el ratón */
+    border-color: #000066 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para formularios */
+.form-label {
+    color: var(--retro-gold);
+    font-weight: bold;
+}
+
+.form-control, .form-select {
+    background-color: #444;
+    color: var(--retro-cream);
+    border: 1px solid var(--retro-light-gray);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #555;
+    color: var(--retro-cream);
+    border-color: var(--retro-gold);
+    box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.5); /* Sombra de enfoque más oscura */
+}
+
+/* Estilos para la lista de elementos (películas, horarios, etc.) */
+.list-group-item {
+    background-color: var(--retro-dark-blue);
+    color: var(--retro-cream);
+    border: 1px solid var(--retro-light-gray);
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.list-group-item:hover {
+    background-color: #000066;
+}
+
+/* Estilos para el footer */
+footer {
+    background-color: var(--retro-red);
+    color: var(--retro-cream);
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    border-top: 5px solid var(--retro-gold);
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para los toasts */
+.toast.bg-success {
+    background-color: var(--retro-red) !important;
+    border-color: var(--retro-gold) !important;
+}
+
+.toast.bg-danger {
+    background-color: var(--retro-dark-blue) !important;
+    border-color: var(--retro-gold) !important;
+}
+
+.toast.bg-warning {
+    background-color: #FF8C00 !important; /* Naranja oscuro para advertencias */
+    border-color: var(--retro-gold) !important;
+}
+
+.toast.bg-info {
+    background-color: #17a2b8 !important; /* Azul claro para información */
+    border-color: var(--retro-gold) !important;
+}
+
+.toast-body {
+    color: var(--retro-cream);
+    text-shadow: var(--retro-text-shadow);
+}

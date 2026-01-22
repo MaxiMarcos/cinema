@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://127.0.0.1:5501"})
 @RestController
 @RequestMapping("/seat")
 public class SeatController {
@@ -28,6 +28,16 @@ public class SeatController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping("/create-multiple")
+    public ResponseEntity<String> createMultipleSeats(@RequestBody SeatDTO seatDTO){
+        try {
+            seatService.createSeats(seatDTO);
+            return new ResponseEntity<>("Multiple seats created successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error creating multiple seats: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/create-all")
@@ -89,7 +99,6 @@ public class SeatController {
         }
     }
 
-    // Para editar status
     @PutMapping("/edit/{id}/status")
     public ResponseEntity editStatusSeat(@PathVariable Long id, @RequestParam Boolean isAvailable){
 

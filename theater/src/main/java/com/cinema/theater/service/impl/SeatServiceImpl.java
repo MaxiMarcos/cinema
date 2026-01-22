@@ -69,10 +69,16 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public SeatDTO editSeat(Long id, Seat seat){
 
-        Seat newSeat = seatRepo.findById(id).orElse(null);
-        seatRepo.save(newSeat);
-
-        return seatMapper.toSeatDTO(newSeat);
+        Seat existingSeat = seatRepo.findById(id).orElse(null);
+        if (existingSeat != null) {
+            existingSeat.setNumber(seat.getNumber());
+            existingSeat.setPrice(seat.getPrice());
+            existingSeat.setIsAvailable(seat.getIsAvailable());
+            existingSeat.setTheater(seat.getTheater());
+            seatRepo.save(existingSeat);
+            return seatMapper.toSeatDTO(existingSeat);
+        }
+        return null; // O lanzar una excepción si el asiento no se encuentra
     }
 
     //Para usar en el microservicio de Purchase y manejar la disponibilidad según se concrete o no la compra
